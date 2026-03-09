@@ -1,7 +1,7 @@
 package org.example.bank2.entity;
 
 import jakarta.persistence.*;
-import org.example.bank2.dto.Status;
+import org.example.bank2.dto.enums.Status;
 
 import java.time.LocalDateTime;
 

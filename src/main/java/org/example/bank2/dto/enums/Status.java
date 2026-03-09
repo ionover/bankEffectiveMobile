@@ -1,4 +1,4 @@
-package org.example.bank2.dto;
+package org.example.bank2.dto.enums;
 
 public enum Status {
     ACTIVE,

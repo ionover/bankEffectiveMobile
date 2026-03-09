@@ -1,41 +1,38 @@
 package org.example.bank2.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import org.example.bank2.controller.OnCreate;
 
 public class UserRequest {
 
-    @NotNull
+    @NotBlank(groups = OnCreate.class)
     private String login;
 
-    @NotNull
+    @NotBlank(groups = OnCreate.class)
     private String password;
 
-    @NotNull
-    private String name;
-
-    @NotNull
+    @NotBlank(groups = OnCreate.class)
     private String surname;
 
-    @NotNull
-    private String middleName;
+    @NotBlank(groups = OnCreate.class)
+    private String isAdmin;
 
-    @NotNull
+    private String name;
+    private String middleName;
     private String phone;
 
     public UserRequest() {
     }
 
-    public UserRequest(String login, String password, String name, String surname, String middleName, String phone) {
+    public UserRequest(String login, String password, String name, String surname, String middleName, String phone,
+                       String isAdmin) {
         this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.middleName = middleName;
         this.phone = phone;
+        this.isAdmin = isAdmin;
     }
 
     public String getLogin() {
@@ -84,5 +81,13 @@ public class UserRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

@@ -1,5 +1,7 @@
 package org.example.bank2.service;
 
+import jakarta.validation.Valid;
+import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.repository.UserRepository;
@@ -33,6 +35,14 @@ public class UserService {
 
     public User createUser(User user) {
         user.setAdmin(false);
+
+        return repository.save(user);
+    }
+
+    public User updateUser(Long id, UserRequest updateUserRequest) {
+        User user = getUserById(id);
+
+        merge();
 
         return repository.save(user);
     }
