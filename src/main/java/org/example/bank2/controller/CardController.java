@@ -2,13 +2,13 @@ package org.example.bank2.controller;
 
 import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
-import org.example.bank2.dto.UserRequest;
 import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.service.CardService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +28,7 @@ public class CardController {
     }
 
     @GetMapping
+    @PreAuthorize(HAS_ANY_AUTHORITY)
     public ResponseEntity<List<Card>> getAll() {
         Stream<Card> cards = cardService.getAllCards();
 
@@ -35,6 +36,7 @@ public class CardController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(HAS_ANY_AUTHORITY)
     public ResponseEntity<Card> getCard(@PathVariable Long id) {
         Card card = cardService.getCardById(id);
 
@@ -42,6 +44,7 @@ public class CardController {
     }
 
     @PostMapping
+    @PreAuthorize(ADMIN_AUTHORITY)
     public ResponseEntity<Card> createCard(@RequestBody @Valid CardRequest userRequest) {
         validateOwnerDto(userRequest.getOwner());
 
@@ -51,13 +54,15 @@ public class CardController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Objects> updateUser(@RequestBody @Valid Status status, @PathVariable Long id) {
+    @PreAuthorize(ADMIN_AUTHORITY)
+    public ResponseEntity<Objects> updateCard(@RequestBody @Valid Status status, @PathVariable Long id) {
         cardService.updateCardStatus(id, status);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(ADMIN_AUTHORITY)
     public ResponseEntity<Objects> deleteCard(@PathVariable Long id) {
         cardService.deleteById(id);
 
