@@ -1,0 +1,26 @@
+info:
+  name: delete user
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://10.10.10.61:8084/users
+  body:
+    type: json
+    data: |-
+      {
+        "login":"email@emai.ru",
+        "password":"12ru",
+        "name":"Имя",
+        "surname":"Фамилия",
+        "middleName":"Отчество",
+        "phone":"+7 978 717 04 09"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
