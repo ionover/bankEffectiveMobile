@@ -1,9 +1,13 @@
 package org.example.bank2.service;
 
+import jakarta.validation.Valid;
+import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.repository.CardRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +20,8 @@ import static org.example.bank2.dto.enums.Status.ACTIVE;
 
 @Service
 public class CardService {
+
+    private final Logger log = LoggerFactory.getLogger(CardService.class);
 
     private final CardRepository repository;
     private final UserService userService;
@@ -58,5 +64,19 @@ public class CardService {
         repository.save(card);
 
         return card;
+    }
+
+    public void deleteById(Long id) {
+        log.debug("Попросили удалить карту с ID {}", id);
+
+        repository.deleteById(id);
+    }
+
+    public void updateCardStatus(Long id, Status status) {
+        Card card = getCardById(id);
+
+        card.setStatus(status);
+
+        repository.save(card);
     }
 }

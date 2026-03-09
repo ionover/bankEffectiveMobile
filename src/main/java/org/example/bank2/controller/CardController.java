@@ -3,6 +3,7 @@ package org.example.bank2.controller;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.UserRequest;
+import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
@@ -49,17 +50,19 @@ public class CardController {
         return ResponseEntity.ok(card);
     }
 
-//    @PatchMapping
-//    public ResponseEntity<User> updateUser(@RequestBody @Valid UserRequest userRequest) {
-//        //TODO: нужно реализовать
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Objects> deleteUser(@PathVariable Long id) {
-//        userService.deleteById(id);
-//
-//        return ResponseEntity.noContent().build();
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<Objects> updateUser(@RequestBody @Valid Status status, @PathVariable Long id) {
+        cardService.updateCardStatus(id, status);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Objects> deleteCard(@PathVariable Long id) {
+        cardService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 
     private void validateOwnerDto(User owner) {
         if (owner.getId() == null) {

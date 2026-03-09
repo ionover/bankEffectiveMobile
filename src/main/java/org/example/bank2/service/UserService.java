@@ -1,19 +1,23 @@
 package org.example.bank2.service;
 
-import jakarta.validation.Valid;
 import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.example.bank2.mapper.UserMapper.userMapper;
+
 @Service
 public class UserService {
+
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository repository;
 
@@ -34,7 +38,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        user.setAdmin(false);
+        log.debug("Попросили создать пользователя {}", user);
 
         return repository.save(user);
     }
@@ -42,7 +46,7 @@ public class UserService {
     public User updateUser(Long id, UserRequest updateUserRequest) {
         User user = getUserById(id);
 
-        merge();
+        userMapper.updateUserFromDto(updateUserRequest, user);
 
         return repository.save(user);
     }

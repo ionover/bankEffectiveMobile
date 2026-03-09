@@ -3,6 +3,7 @@ package org.example.bank2.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @Entity
@@ -135,5 +136,20 @@ public class User {
 
     public void setCards(Set<Card> cards) {
         this.cards = cards;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + (id == null ? "null" : "\"" + id + "\"") + ", " +
+                "\"login\":" + (login == null ? "null" : "\"" + login + "\"") + ", " +
+                "\"password\":" + (password == null ? "null" : "\"" + password + "\"") + ", " +
+                "\"name\":" + (name == null ? "null" : "\"" + name + "\"") + ", " +
+                "\"surname\":" + (surname == null ? "null" : "\"" + surname + "\"") + ", " +
+                "\"middleName\":" + (middleName == null ? "null" : "\"" + middleName + "\"") + ", " +
+                "\"phone\":" + (phone == null ? "null" : "\"" + phone + "\"") + ", " +
+                "\"isAdmin\":" + (isAdmin == null ? "null" : "\"" + isAdmin + "\"") + ", " +
+                "\"cards\":" + (cards == null ? "null" : Arrays.toString(cards.toArray())) +
+                "}";
     }
 }
