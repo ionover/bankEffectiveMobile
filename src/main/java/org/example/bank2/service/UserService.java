@@ -37,6 +37,11 @@ public class UserService {
                          .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
     }
 
+    public User getUserByLogin(String login) {
+        return repository.findByLogin(login)
+                         .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
+    }
+
     public User createUser(User user) {
         log.debug("Попросили создать пользователя {}", user);
 

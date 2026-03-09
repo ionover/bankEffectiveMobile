@@ -5,18 +5,10 @@ info:
 
 http:
   method: POST
-  url: http://10.10.10.61:8084/users
+  url: http://10.10.10.61:8084/users/2
   body:
     type: json
-    data: |-
-      {
-        "login":"email@emai.ru",
-        "password":"12ru",
-        "name":"Имя",
-        "surname":"Фамилия",
-        "middleName":"Отчество",
-        "phone":"+7 978 717 04 09"
-      }
+    data: ""
   auth: inherit
 
 settings:
