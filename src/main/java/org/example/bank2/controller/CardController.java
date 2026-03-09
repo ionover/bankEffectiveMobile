@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.example.bank2.mapper.CardMapper.cardMapper;
+import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
+import static org.example.bank2.security.Authorities.HAS_ANY_AUTHORITY;
 
 @RestController
 @RequestMapping("/cards")
