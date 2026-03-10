@@ -2,7 +2,8 @@ package org.example.bank2.controller;
 
 import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
-import org.example.bank2.dto.enums.Status;
+import org.example.bank2.dto.CardResponse;
+import org.example.bank2.dto.CardStatusUpdateRequest;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.service.CardService;
@@ -16,6 +17,7 @@ import java.util.Objects;
 
 import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
 import static org.example.bank2.security.Authorities.HAS_ANY_AUTHORITY;
+import static org.example.bank2.security.Authorities.USER;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -30,32 +32,41 @@ public class CardController {
 
     @GetMapping
     @PreAuthorize(HAS_ANY_AUTHORITY)
-    public ResponseEntity<Page<Card>> getAll(Pageable pageable) {
-        Page<Card> cards = cardService.getAllCards(pageable);
+    public ResponseEntity<Page<CardResponse>> getAll(Pageable pageable) {
+        Page<CardResponse> cards = cardService.getAllCards(pageable);
 
         return ResponseEntity.ok(cards);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize(HAS_ANY_AUTHORITY)
-    public ResponseEntity<Card> getCard(@PathVariable Long id) {
-        Card card = cardService.getCardById(id);
+    public ResponseEntity<CardResponse> getCard(@PathVariable Long id) {
+        CardResponse card = cardService.getCardById(id);
 
         return ResponseEntity.ok(card);
     }
 
     @PostMapping
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Card> createCard(@RequestBody @Valid CardRequest request) {
-        Card card = cardService.createCard(new Card(request.getNumber(), new User(request.getOwner())));
+    public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest request) {
+        CardResponse card = cardService.createCard(new Card(request.getNumber(), new User(request.getOwner())));
 
         return ResponseEntity.status(CREATED).body(card);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/status")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Objects> updateCard(@RequestBody @Valid Status status, @PathVariable Long id) {
-        cardService.updateCardStatus(id, status);
+    public ResponseEntity<Objects> updateCard(@RequestBody @Valid CardStatusUpdateRequest request,
+                                              @PathVariable Long id) {
+        cardService.updateCardStatus(id, request.getStatus());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/block-request")
+    @PreAuthorize("hasAuthority('" + USER + "')")
+    public ResponseEntity<Objects> requestBlock(@PathVariable Long id) {
+        cardService.requestCardBlock(id);
 
         return ResponseEntity.noContent().build();
     }

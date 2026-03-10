@@ -1,9 +1,11 @@
 package org.example.bank2.service;
 
+import org.example.bank2.dto.CardResponse;
 import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
+import org.example.bank2.exception.ForbiddenException;
 import org.example.bank2.repository.CardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.example.bank2.dto.enums.Status.ACTIVE;
+import static org.example.bank2.dto.enums.Status.BLOCKED;
 import static org.example.bank2.security.Authorities.getCurrentUserLogin;
 import static org.example.bank2.security.Authorities.isAdmin;
 
@@ -31,22 +34,21 @@ public class CardService {
         this.userService = userService;
     }
 
-    public Page<Card> getAllCards(Pageable pageable) {
+    public Page<CardResponse> getAllCards(Pageable pageable) {
         if (isAdmin()) {
-            return repository.findAll(pageable);
+            return repository.findAll(pageable).map(this::mapToResponse);
         }
 
         User user = userService.getUserByLogin(getCurrentUserLogin());
 
-        return repository.findAllByOwnerId(user.getId(), pageable);
+        return repository.findAllByOwnerId(user.getId(), pageable).map(this::mapToResponse);
     }
 
-    public Card getCardById(Long id) {
-        return repository.findById(id)
-                         .orElseThrow(() -> new BadRequestException("Карта с ID" + id + " не найдена!!!"));
+    public CardResponse getCardById(Long id) {
+        return mapToResponse(getAccessibleCardById(id));
     }
 
-    public Card createCard(Card card) {
+    public CardResponse createCard(Card card) {
         User user = userService.getUserById(card.getOwner().getId());
 
         Optional<Card> oCard = repository.findByNumber(card.getNumber());
@@ -67,20 +69,55 @@ public class CardService {
 
         repository.save(card);
 
-        return card;
+        return mapToResponse(card);
     }
 
     public void deleteById(Long id) {
         log.debug("Попросили удалить карту с ID {}", id);
 
+        getCardEntityById(id);
         repository.deleteById(id);
     }
 
     public void updateCardStatus(Long id, Status status) {
-        Card card = getCardById(id);
+        Card card = getCardEntityById(id);
 
         card.setStatus(status);
 
         repository.save(card);
+    }
+
+    public void requestCardBlock(Long id) {
+        Card card = getAccessibleCardById(id);
+
+        card.setStatus(BLOCKED);
+        repository.save(card);
+    }
+
+    private Card getAccessibleCardById(Long id) {
+        if (isAdmin()) {
+            return getCardEntityById(id);
+        }
+
+        User user = userService.getUserByLogin(getCurrentUserLogin());
+
+        return repository.findByIdAndOwnerId(id, user.getId())
+                         .orElseThrow(() -> new ForbiddenException("Карта недоступна текущему пользователю"));
+    }
+
+    private Card getCardEntityById(Long id) {
+        return repository.findById(id)
+                         .orElseThrow(() -> new BadRequestException("Карта с ID " + id + " не найдена"));
+    }
+
+    private CardResponse mapToResponse(Card card) {
+        return new CardResponse(
+                card.getId(),
+                card.getNumber(),
+                card.getOwner().getId(),
+                card.getValidityPeriod(),
+                card.getStatus(),
+                card.getBalance()
+        );
     }
 }
