@@ -5,19 +5,16 @@ info:
 
 http:
   method: PATCH
-  url: http://10.10.10.61:8084/users
+  url: http://10.10.10.61:8084/users/2
   body:
     type: json
     data: |-
       {
-        "login": "name1",
-        "password": "123",
-        "surname": "surname",
-        "isAdmin": false
+        "name": "name12"
       }
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzIzNSwiZXhwIjoxNzczMjEzNjM1fQ.3KTtCOdgOUAQxzu2IHyqh_89-uswYrlOcSkRkeBKMxQ
+    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzQxMCwiZXhwIjoxNzczMjEzODEwfQ.yNK4pkgQeWlQ8X5sEdXYKT5kIlP2rTb_fjjiGUQqUF4
 
 settings:
   encodeUrl: true

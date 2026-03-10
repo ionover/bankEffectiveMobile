@@ -74,7 +74,11 @@ public class UserController {
             throw new BadRequestException("Логин пользователя менять нельзя!!!");
         }
 
-        if (updateUserRequest.getPassword() != null || updateUserRequest.getPassword().isEmpty()) {
+        if (updateUserRequest.getPassword() == null) {
+            return;
+        }
+
+        if (updateUserRequest.getPassword().isEmpty()) {
             throw new BadRequestException("Пароль пользователя не может быть пустым!!!");
         }
     }
