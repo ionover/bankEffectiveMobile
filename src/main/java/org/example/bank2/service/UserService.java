@@ -1,5 +1,6 @@
 package org.example.bank2.service;
 
+import org.example.bank2.dto.UserProjection;
 import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
@@ -8,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.example.bank2.mapper.UserMapper.userMapper;
@@ -22,10 +23,14 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
+    private final ProjectionFactory projectionFactory;
     private final BCryptPasswordEncoder encoder;
     private final UserRepository repository;
 
-    public UserService(BCryptPasswordEncoder encoder, UserRepository repository) {
+    public UserService(ProjectionFactory projectionFactory,
+                       BCryptPasswordEncoder encoder,
+                       UserRepository repository) {
+        this.projectionFactory = projectionFactory;
         this.encoder = encoder;
         this.repository = repository;
     }
@@ -33,18 +38,16 @@ public class UserService {
     public Page<User> getAllUsers(Pageable pageable) {
         Page<User> users = repository.findAll(pageable);
 
-        hidePassword(users);
+        users.getContent().forEach(this::mapToUserProjection);
 
         return users;
     }
 
-    public User getUserById(Long id) {
+    public UserProjection getUserProjectionById(Long id) {
         User user = repository.findUserById(id)
                               .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
 
-        hidePassword(user);
-
-        return user;
+        return mapToUserProjection(user);
     }
 
     public User getUserByLogin(String login) {
@@ -53,7 +56,7 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(User user) {
+    public UserProjection createUser(User user) {
         log.debug("Попросили создать пользователя {}", user);
 
         Optional<User> olUser = repository.findUserByLogin(user.getLogin());
@@ -65,13 +68,11 @@ public class UserService {
 
         user = repository.save(user);
 
-        hidePassword(user);
-
-        return user;
+        return mapToUserProjection(user);
     }
 
     @Transactional
-    public User updateUser(Long id, UserRequest updateUserRequest) {
+    public UserProjection updateUser(Long id, UserRequest updateUserRequest) {
         if (updateUserRequest.getPassword() == null) {
             updateUserRequest.setPassword(encoder.encode(updateUserRequest.getPassword()));
         }
@@ -81,9 +82,7 @@ public class UserService {
 
         user = repository.save(user);
 
-        hidePassword(user);
-
-        return user;
+        return mapToUserProjection(user);
     }
 
     @Transactional
@@ -97,12 +96,12 @@ public class UserService {
         repository.deleteById(id);
     }
 
-    private static void hidePassword(Page<User> users) {
-        List<User> list = users.getContent();
-        list.forEach(UserService::hidePassword);
+    private User getUserById(Long id) {
+        return repository.findUserById(id)
+                         .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
     }
 
-    private static void hidePassword(User user) {
-        user.setPassword("******");
+    private UserProjection mapToUserProjection(User user) {
+        return projectionFactory.createProjection(UserProjection.class, user);
     }
 }

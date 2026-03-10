@@ -1,6 +1,7 @@
 package org.example.bank2.controller;
 
 import jakarta.validation.Valid;
+import org.example.bank2.dto.UserProjection;
 import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
@@ -37,26 +38,27 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<UserProjection> getUser(@PathVariable Long id) {
+        UserProjection user = userService.getUserProjectionById(id);
 
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<User> createUser(@RequestBody @Validated(OnCreate.class) UserRequest createUserRequest) {
-        User user = userService.createUser(userMapper.toEntity(createUserRequest));
+    public ResponseEntity<UserProjection> createUser(@RequestBody @Validated(OnCreate.class) UserRequest createUser) {
+        UserProjection user = userService.createUser(userMapper.toEntity(createUser));
 
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/{id}")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<User> updateUser(@RequestBody @Valid UserRequest updateUserRequest, @PathVariable Long id) {
+    public ResponseEntity<UserProjection> updateUser(@RequestBody @Valid UserRequest updateUserRequest,
+                                                     @PathVariable Long id) {
         validateUserUpdateDto(updateUserRequest);
 
-        User user = userService.updateUser(id, updateUserRequest);
+        UserProjection user = userService.updateUser(id, updateUserRequest);
 
         return ResponseEntity.ok(user);
     }

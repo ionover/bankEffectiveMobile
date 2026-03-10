@@ -48,7 +48,7 @@ public class CardService {
     }
 
     public Card createCard(Card card) {
-        User user = userService.getUserById(card.getOwner().getId());
+        User user = userService.getUser1ById(card.getOwner().getId());
 
         Optional<Card> oCard = repository.findByNumber(card.getNumber());
         if (oCard.isPresent()) {
