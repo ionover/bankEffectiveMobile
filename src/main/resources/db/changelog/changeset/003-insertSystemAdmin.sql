@@ -7,7 +7,7 @@ INSERT INTO users(login,
                   surname,
                   is_admin)
 VALUES ('systemAdmin@mail.com',
-        '$2a$10$6tAWZNv7mz.o9fPV9BtegeFZpB7e2CcLex4UE/QU9C6Cfp2R3jbuW',
+        '$2a$10$6tAWZNv7mz.o9fPV9BtegeFZpB7e2CcLex4UE/QU9C6Cfp2R3jbuW', --12
         'system',
         'admin',
         true);

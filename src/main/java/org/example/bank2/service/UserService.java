@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.resilience.annotation.Retryable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.example.bank2.mapper.UserMapper.userMapper;
@@ -31,7 +31,11 @@ public class UserService {
     }
 
     public Page<User> getAllUsers(Pageable pageable) {
-        return repository.findAll(pageable);
+        Page<User> users = repository.findAll(pageable);
+
+        hidePassword(users);
+
+        return users;
     }
 
     public User getUserById(Long id) {
@@ -58,6 +62,7 @@ public class UserService {
         return repository.save(user);
     }
 
+    @Transactional
     public User updateUser(Long id, UserRequest updateUserRequest) {
         User user = getUserById(id);
 
@@ -66,6 +71,7 @@ public class UserService {
         return repository.save(user);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         User user = getUserById(id);
 
@@ -74,5 +80,10 @@ public class UserService {
         }
 
         repository.deleteById(id);
+    }
+
+    private static void hidePassword(Page<User> users) {
+        List<User> list = users.getContent();
+        list.forEach(u -> u.setPassword("******"));
     }
 }
