@@ -4,12 +4,14 @@ info:
   seq: 3
 
 http:
-  method: POST
+  method: DELETE
   url: http://10.10.10.61:8084/users/2
   body:
     type: json
     data: ""
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzY2MiwiZXhwIjoxNzczMjE0MDYyfQ.NZi73ezfogrqsadipDjfQvl12gDr5h8Zfnr_69yYmvA
 
 settings:
   encodeUrl: true
