@@ -5,7 +5,14 @@ info:
 
 http:
   method: POST
-  url: ""
+  url: http://10.10.10.61:8084/oauth/login
+  body:
+    type: json
+    data: |-
+      {
+        "login": "systemAdmin@mail.com",
+        "password": "12"
+      }
   auth: inherit
 
 settings:

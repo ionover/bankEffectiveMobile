@@ -3,6 +3,7 @@ package org.example.bank2.controller;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
+import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,8 @@ public class UserController {
     @PatchMapping("/{id}")
     @PreAuthorize(ADMIN_AUTHORITY)
     public ResponseEntity<User> updateUser(@RequestBody @Valid UserRequest updateUserRequest, @PathVariable Long id) {
+        validateUserUpdateDto(updateUserRequest);
+
         User user = userService.updateUser(id, updateUserRequest);
 
         return ResponseEntity.ok(user);
@@ -64,5 +67,15 @@ public class UserController {
         userService.deleteById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    private void validateUserUpdateDto(@Valid UserRequest updateUserRequest) {
+        if (updateUserRequest.getLogin() != null) {
+            throw new BadRequestException("Логин пользователя менять нельзя!!!");
+        }
+
+        if (updateUserRequest.getPassword() != null || updateUserRequest.getPassword().isEmpty()) {
+            throw new BadRequestException("Пароль пользователя не может быть пустым!!!");
+        }
     }
 }

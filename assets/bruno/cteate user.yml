@@ -10,7 +10,10 @@ http:
     type: json
     data: |-
       {
-        "name":"name"
+        "login": "name",
+        "password": "12",
+        "surname": "surname",
+        "isAdmin": false
       }
   auth: inherit
 

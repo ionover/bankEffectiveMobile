@@ -39,8 +39,12 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return repository.findUserById(id)
+        User user = repository.findUserById(id)
                          .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
+
+        hidePassword(user);
+
+        return user;
     }
 
     public User getUserByLogin(String login) {
@@ -64,8 +68,11 @@ public class UserService {
 
     @Transactional
     public User updateUser(Long id, UserRequest updateUserRequest) {
-        User user = getUserById(id);
+        if (updateUserRequest.getPassword() == null) {
+            updateUserRequest.setPassword(encoder.encode(updateUserRequest.getPassword()));
+        }
 
+        User user = getUserById(id);
         userMapper.updateUserFromDto(updateUserRequest, user);
 
         return repository.save(user);
@@ -84,6 +91,10 @@ public class UserService {
 
     private static void hidePassword(Page<User> users) {
         List<User> list = users.getContent();
-        list.forEach(u -> u.setPassword("******"));
+        list.forEach(UserService::hidePassword);
+    }
+
+    private static void hidePassword(User user) {
+        user.setPassword("******");
     }
 }
