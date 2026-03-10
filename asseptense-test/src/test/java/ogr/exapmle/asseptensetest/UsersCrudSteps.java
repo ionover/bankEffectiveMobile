@@ -6,11 +6,9 @@ import io.cucumber.java.en.When;
 import org.example.bank2.dto.UserRequest;
 
 import static io.restassured.RestAssured.given;
-import static ogr.exapmle.asseptensetest.BaseSteps.BASE_URL;
-import static ogr.exapmle.asseptensetest.BaseSteps.TOKEN;
-import static ogr.exapmle.asseptensetest.BaseSteps.gson;
-import static ogr.exapmle.asseptensetest.BaseSteps.response;
+import static ogr.exapmle.asseptensetest.BaseSteps.*;
 import static ogr.exapmle.asseptensetest.UserTemplates.getUserTemplate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UsersCrudSteps {
 
@@ -26,6 +24,7 @@ public class UsersCrudSteps {
                 .when()
                 .post(BASE_URL + "/users");
 
+        assertEquals(200, response.statusCode());
     }
 
     @When("Admin creates a user with name {string}")

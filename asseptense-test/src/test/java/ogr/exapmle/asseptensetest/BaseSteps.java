@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseSteps {
 
-    public static final String BASE_URL = "http://localhost:8084/";
+    public static final String BASE_URL = "http://localhost:8084";
     public static String TOKEN;
 
     public static Response response;
@@ -22,13 +22,13 @@ public class BaseSteps {
         LoginDto login = new LoginDto(username, password);
 
         response = given()
+                .header("Content-Type", "application/json")
                 .body(gson.toJson(login))
                 .when()
                 .post(BASE_URL + "/oauth/login");
 
-        if (response.statusCode() == 200) {
-            TOKEN = response.body().asString();
-        }
+        assertEquals(200, response.getStatusCode());
+        TOKEN = response.body().asString();
     }
 
     @Then("сервер отвечает статусом {int}")
