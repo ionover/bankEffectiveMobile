@@ -71,6 +71,12 @@
             <artifactId>rest-assured</artifactId>
             <version>6.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
     </dependencies>
 
     <build>
