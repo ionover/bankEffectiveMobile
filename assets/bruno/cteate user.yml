@@ -10,12 +10,14 @@ http:
     type: json
     data: |-
       {
-        "login": "name",
-        "password": "12",
+        "login": "name1",
+        "password": "123",
         "surname": "surname",
         "isAdmin": false
       }
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzIzNSwiZXhwIjoxNzczMjEzNjM1fQ.3KTtCOdgOUAQxzu2IHyqh_89-uswYrlOcSkRkeBKMxQ
 
 settings:
   encodeUrl: true

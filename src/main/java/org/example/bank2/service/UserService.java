@@ -40,7 +40,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         User user = repository.findUserById(id)
-                         .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
+                              .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
 
         hidePassword(user);
 
@@ -63,7 +63,11 @@ public class UserService {
 
         user.setPassword(encoder.encode(user.getPassword()));
 
-        return repository.save(user);
+        user = repository.save(user);
+
+        hidePassword(user);
+
+        return user;
     }
 
     @Transactional
@@ -75,14 +79,18 @@ public class UserService {
         User user = getUserById(id);
         userMapper.updateUserFromDto(updateUserRequest, user);
 
-        return repository.save(user);
+        user = repository.save(user);
+
+        hidePassword(user);
+
+        return user;
     }
 
     @Transactional
     public void deleteById(Long id) {
         User user = getUserById(id);
 
-        if (user.isAdmin()) {
+        if (user.getIsAdmin()) {
             throw new BadRequestException("Невозможно удалить администратора!!!");
         }
 

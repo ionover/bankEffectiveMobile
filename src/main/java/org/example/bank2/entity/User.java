@@ -24,10 +24,11 @@ public class User {
 
     @Column
     @NotNull
-    private String name;
+    private String surname;
 
     @Column
-    private String surname;
+    @NotNull
+    private Boolean isAdmin;
 
     @Column
     private String middleName;
@@ -36,7 +37,7 @@ public class User {
     private String phone;
 
     @Column
-    private Boolean isAdmin;
+    private String name;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards;
@@ -122,11 +123,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Boolean isAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setIsAdmin(Boolean admin) {
         isAdmin = admin;
     }
 

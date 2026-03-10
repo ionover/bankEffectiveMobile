@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+import static org.example.bank2.security.Authorities.ADMIN;
+import static org.example.bank2.security.Authorities.USER;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -24,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userService.getUserByLogin(username);
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
-                user.isAdmin() ? "ADMIN" : "USER"
+                user.getIsAdmin() ? ADMIN : USER
         );
 
         return new org.springframework.security.core.userdetails.User(

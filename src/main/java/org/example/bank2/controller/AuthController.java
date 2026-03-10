@@ -37,7 +37,7 @@ public class AuthController {
 
         User user = userService.getUserByLogin(loginDto.getLogin());
 
-        String token = jwtUtil.generateToken(user.getLogin(), user.isAdmin());
+        String token = jwtUtil.generateToken(user.getLogin(), user.getIsAdmin());
 
         return ResponseEntity.ok(token);
     }

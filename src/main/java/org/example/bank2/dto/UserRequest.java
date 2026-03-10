@@ -1,6 +1,7 @@
 package org.example.bank2.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.example.bank2.controller.OnCreate;
 
 public class UserRequest {
@@ -14,8 +15,8 @@ public class UserRequest {
     @NotBlank(groups = OnCreate.class)
     private String surname;
 
-    @NotBlank(groups = OnCreate.class)
-    private String isAdmin;
+    @NotNull(groups = OnCreate.class)
+    private Boolean isAdmin;
 
     private String name;
     private String middleName;
@@ -25,7 +26,7 @@ public class UserRequest {
     }
 
     public UserRequest(String login, String password, String name, String surname, String middleName, String phone,
-                       String isAdmin) {
+                       Boolean isAdmin) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -83,11 +84,11 @@ public class UserRequest {
         this.phone = phone;
     }
 
-    public String getIsAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(String isAdmin) {
+    public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 }
