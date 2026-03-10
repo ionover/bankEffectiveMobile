@@ -5,6 +5,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.bank2.dto.UserRequest;
 
+import static io.restassured.RestAssured.given;
+import static ogr.exapmle.asseptensetest.BaseSteps.BASE_URL;
+import static ogr.exapmle.asseptensetest.BaseSteps.TOKEN;
+import static ogr.exapmle.asseptensetest.BaseSteps.gson;
+import static ogr.exapmle.asseptensetest.BaseSteps.response;
 import static ogr.exapmle.asseptensetest.UserTemplates.getUserTemplate;
 
 public class UsersCrudSteps {
@@ -13,6 +18,14 @@ public class UsersCrudSteps {
     @When("я создаю пользователя по шаблону {string}")
     public void createUserByTemplate(String template) {
         UserRequest userRequest = getUserTemplate(template);
+
+        response = given()
+                .header("Authorization", "Bearer " + TOKEN)
+                .header("Content-Type", "application/json")
+                .body(gson.toJson(userRequest))
+                .when()
+                .post(BASE_URL + "/users");
+
     }
 
     @When("Admin creates a user with name {string}")

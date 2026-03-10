@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseSteps {
 
-    public static final String BASE_URL = "http://localhost:8080/";
+    public static final String BASE_URL = "http://localhost:8084/";
     public static String TOKEN;
 
-    public Response response;
-    public static Gson gson;
+    public static Response response;
+    public static Gson gson = new Gson();
 
     @Given("пользователь авторизован как {string} с паролем {string}")
     public void doLogin(String username, String password) {
@@ -33,6 +33,6 @@ public class BaseSteps {
 
     @Then("сервер отвечает статусом {int}")
     public void checkStatus(int status) {
-        assertEquals(response.getStatusCode(), status);
+        assertEquals(status, response.statusCode());
     }
 }
