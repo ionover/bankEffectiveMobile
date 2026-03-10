@@ -1,5 +1,6 @@
 package org.example.bank2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.example.bank2.dto.enums.Status;
 
@@ -18,6 +19,7 @@ public class Card {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner", nullable = false)
+    @JsonBackReference
     private User owner;
 
     @Column(name = "validity_period")
