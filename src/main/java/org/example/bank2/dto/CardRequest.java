@@ -9,12 +9,12 @@ public class CardRequest {
     private String number;
 
     @NotNull
-    private User owner;
+    private Long owner;
 
     public CardRequest() {
     }
 
-    public CardRequest(String number, User owner) {
+    public CardRequest(String number, Long owner) {
         this.number = number;
         this.owner = owner;
     }
@@ -27,11 +27,11 @@ public class CardRequest {
         this.number = number;
     }
 
-    public User getOwner() {
+    public Long getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(Long owner) {
         this.owner = owner;
     }
 }

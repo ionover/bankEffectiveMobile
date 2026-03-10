@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class Card {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -29,6 +30,11 @@ public class Card {
     private Long balance;
 
     public Card() {
+    }
+
+    public Card(String number, User owner) {
+        this.number = number;
+        this.owner = owner;
     }
 
     public Card(Long id, String number, User owner, LocalDateTime validityPeriod, Status status, Long balance) {

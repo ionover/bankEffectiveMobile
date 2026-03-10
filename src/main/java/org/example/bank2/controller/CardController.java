@@ -5,7 +5,6 @@ import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
-import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.service.CardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-import static org.example.bank2.mapper.CardMapper.cardMapper;
 import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
 import static org.example.bank2.security.Authorities.HAS_ANY_AUTHORITY;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/cards")
@@ -47,12 +46,10 @@ public class CardController {
 
     @PostMapping
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Card> createCard(@RequestBody @Valid CardRequest userRequest) {
-        validateOwnerDto(userRequest.getOwner());
+    public ResponseEntity<Card> createCard(@RequestBody @Valid CardRequest request) {
+        Card card = cardService.createCard(new Card(request.getNumber(), new User(request.getOwner())));
 
-        Card card = cardService.createCard(cardMapper.toEntity(userRequest));
-
-        return ResponseEntity.ok(card);
+        return ResponseEntity.status(CREATED).body(card);
     }
 
     @PatchMapping("/{id}")
@@ -69,11 +66,5 @@ public class CardController {
         cardService.deleteById(id);
 
         return ResponseEntity.noContent().build();
-    }
-
-    private void validateOwnerDto(User owner) {
-        if (owner.getId() == null) {
-            throw new BadRequestException("Обязательно указывать ID владельца карты");
-        }
     }
 }

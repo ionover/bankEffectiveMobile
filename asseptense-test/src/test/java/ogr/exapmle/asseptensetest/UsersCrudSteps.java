@@ -40,6 +40,6 @@ public class UsersCrudSteps {
                 .when()
                 .post(BASE_URL + "/users");
 
-        userId = response.jsonPath().getLong("");
+        userId = response.jsonPath().getLong("id");
     }
 }

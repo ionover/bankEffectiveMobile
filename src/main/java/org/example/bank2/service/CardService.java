@@ -56,6 +56,7 @@ public class CardService {
 
         card.setOwner(user);
         card.setStatus(ACTIVE);
+        card.setBalance(0L);
 
         LocalDateTime defaultUsePeriod = LocalDateTime.now()
                                                       .toLocalDate()

@@ -45,6 +45,10 @@ public class User {
     public User() {
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     public User(Long id, String login, String password, String name, String surname, String middleName, String phone,
                 Boolean isAdmin, Set<Card> cards) {
         this.id = id;

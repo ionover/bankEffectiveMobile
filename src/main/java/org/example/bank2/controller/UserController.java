@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static org.example.bank2.mapper.UserMapper.userMapper;
 import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/users")
@@ -49,7 +50,7 @@ public class UserController {
     public ResponseEntity<UserProjection> createUser(@RequestBody @Validated(OnCreate.class) UserRequest createUser) {
         UserProjection user = userService.createUser(userMapper.toEntity(createUser));
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(CREATED).body(user);
     }
 
     @PatchMapping("/{id}")

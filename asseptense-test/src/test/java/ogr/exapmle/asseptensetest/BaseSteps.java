@@ -5,6 +5,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,6 +18,7 @@ public class BaseSteps {
 
     public static Response response;
     public static Gson gson = new Gson();
+    public static Random random = new Random();
 
     @Then("сервер отвечает статусом {int}")
     public void checkStatus(int status) {
