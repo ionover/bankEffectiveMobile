@@ -1,0 +1,26 @@
+info:
+  name: patch user
+  type: http
+  seq: 6
+
+http:
+  method: PATCH
+  url: http://10.10.10.61:8084/users
+  body:
+    type: json
+    data: |-
+      {
+        "login": "name1",
+        "password": "123",
+        "surname": "surname",
+        "isAdmin": false
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzIzNSwiZXhwIjoxNzczMjEzNjM1fQ.3KTtCOdgOUAQxzu2IHyqh_89-uswYrlOcSkRkeBKMxQ
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
