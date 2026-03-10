@@ -1,6 +1,5 @@
 package org.example.bank2.service;
 
-import jakarta.validation.Valid;
 import org.example.bank2.dto.enums.Status;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
@@ -8,15 +7,16 @@ import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.repository.CardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.example.bank2.dto.enums.Status.ACTIVE;
+import static org.example.bank2.security.Authorities.getCurrentUserLogin;
+import static org.example.bank2.security.Authorities.isAdmin;
 
 @Service
 public class CardService {
@@ -31,11 +31,15 @@ public class CardService {
         this.userService = userService;
     }
 
-    public Stream<Card> getAllCards() {
-        List<Card> cards = new ArrayList<>();
-        repository.findAll().forEach(cards::add);
+    public Page<Card> getAllCards(Pageable pageable) {
+        if (isAdmin()) {
+            return repository.findAll(pageable);
+        }
 
-        return cards.stream();
+        User user = userService.getUserByLogin(getCurrentUserLogin());
+
+        return repository.findAllByOwnerId(user.getId(), pageable);
+
     }
 
     public Card getCardById(Long id) {
@@ -46,7 +50,7 @@ public class CardService {
     public Card createCard(Card card) {
         User user = userService.getUserById(card.getOwner().getId());
 
-        Optional<Card> oCard = repository.findCardByNumber(card.getNumber());
+        Optional<Card> oCard = repository.findByNumber(card.getNumber());
         if (oCard.isPresent()) {
             throw new BadRequestException("Создание карты отклонено");
         }
