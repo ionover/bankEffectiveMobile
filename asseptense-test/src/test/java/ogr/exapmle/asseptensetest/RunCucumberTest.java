@@ -8,7 +8,9 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("ru/mycrg/nordcodes")
+@SelectClasspathResource("ogr/exapmle/asseptensetest")
+@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "ogr.exapmle.asseptensetest")
+@ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-reports/cucumber.html")
 public class RunCucumberTest {
 
 }
