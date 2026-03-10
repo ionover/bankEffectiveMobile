@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,24 +22,17 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private final ProjectionFactory projectionFactory;
     private final BCryptPasswordEncoder encoder;
     private final UserRepository repository;
 
-    public UserService(ProjectionFactory projectionFactory,
-                       BCryptPasswordEncoder encoder,
+    public UserService(BCryptPasswordEncoder encoder,
                        UserRepository repository) {
-        this.projectionFactory = projectionFactory;
         this.encoder = encoder;
         this.repository = repository;
     }
 
-    public Page<User> getAllUsers(Pageable pageable) {
-        Page<User> users = repository.findAll(pageable);
-
-        users.getContent().forEach(this::mapToUserProjection);
-
-        return users;
+    public Page<UserProjection> getAllUsers(Pageable pageable) {
+        return repository.findAll(pageable).map(this::mapToUserProjection);
     }
 
     public UserProjection getUserProjectionById(Long id) {
@@ -96,12 +88,12 @@ public class UserService {
         repository.deleteById(id);
     }
 
-    private User getUserById(Long id) {
+    public User getUserById(Long id) {
         return repository.findUserById(id)
                          .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
     }
 
     private UserProjection mapToUserProjection(User user) {
-        return projectionFactory.createProjection(UserProjection.class, user);
+        return userMapper.toProjection(user);
     }
 }

@@ -1,29 +1,26 @@
 package org.example.bank2.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.example.bank2.controller.OnCreate;
-import org.example.bank2.entity.Card;
-
-import java.util.Set;
-
 public class UserProjection {
 
     private Long id;
+
     private String login;
+
     private String surname;
+
     private Boolean isAdmin;
+
     private String middleName;
+
     private String phone;
+
     private String name;
-    private Set<Card> cards;
 
     public UserProjection() {
     }
 
-    public UserProjection(Long id, String login, String surname, Boolean isAdmin, String middleName, String phone,
-                          String name, Set<Card> cards) {
+    public UserProjection(Long id, String login, String surname, Boolean isAdmin, String middleName,
+                          String phone, String name) {
         this.id = id;
         this.login = login;
         this.surname = surname;
@@ -31,7 +28,6 @@ public class UserProjection {
         this.middleName = middleName;
         this.phone = phone;
         this.name = name;
-        this.cards = cards;
     }
 
     public Long getId() {
@@ -50,6 +46,7 @@ public class UserProjection {
         this.login = login;
     }
 
+
     public String getSurname() {
         return surname;
     }
@@ -58,11 +55,11 @@ public class UserProjection {
         this.surname = surname;
     }
 
-    public Boolean getAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setIsAdmin(Boolean admin) {
         isAdmin = admin;
     }
 
@@ -88,13 +85,5 @@ public class UserProjection {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(Set<Card> cards) {
-        this.cards = cards;
     }
 }

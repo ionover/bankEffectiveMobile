@@ -39,7 +39,6 @@ public class CardService {
         User user = userService.getUserByLogin(getCurrentUserLogin());
 
         return repository.findAllByOwnerId(user.getId(), pageable);
-
     }
 
     public Card getCardById(Long id) {
@@ -48,7 +47,7 @@ public class CardService {
     }
 
     public Card createCard(Card card) {
-        User user = userService.getUser1ById(card.getOwner().getId());
+        User user = userService.getUserById(card.getOwner().getId());
 
         Optional<Card> oCard = repository.findByNumber(card.getNumber());
         if (oCard.isPresent()) {

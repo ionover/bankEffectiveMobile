@@ -1,12 +1,12 @@
 package org.example.bank2.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public class LoginDto {
 
-    @NotNull
+    @NotBlank(message = "Логин не может быть пустым")
     private String login;
-    @NotNull
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
 
     public LoginDto() {

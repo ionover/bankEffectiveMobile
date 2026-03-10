@@ -1,16 +1,32 @@
 package ogr.exapmle.asseptensetest;
 
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.bank2.dto.UserRequest;
 
 import static io.restassured.RestAssured.given;
 import static ogr.exapmle.asseptensetest.BaseSteps.*;
 import static ogr.exapmle.asseptensetest.UserTemplates.getUserTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UsersCrudSteps {
+
+    @When("я получаю пользователей платформы")
+    public void getAllUsers() {
+        response = given()
+                .header("Authorization", "Bearer " + TOKEN)
+                .header("Content-Type", "application/json")
+                .when()
+                .get(BASE_URL + "/users");
+    }
+
+    @When("я получаю пользователей платформы с ID {int}")
+    public void getUserById(int id) {
+        response = given()
+                .header("Authorization", "Bearer " + TOKEN)
+                .header("Content-Type", "application/json")
+                .when()
+                .get(BASE_URL + "/users/" + id);
+    }
 
     @Given("существует пользователь по шаблону {string}")
     @When("я создаю пользователя по шаблону {string}")
@@ -24,16 +40,6 @@ public class UsersCrudSteps {
                 .when()
                 .post(BASE_URL + "/users");
 
-        assertEquals(200, response.statusCode());
-    }
-
-    @When("Admin creates a user with name {string}")
-    public void adminCreatesUser(String name) {
-        // TODO: Implement step
-    }
-
-    @Then("User {string} should be created")
-    public void userShouldBeCreated(String name) {
-        // TODO: Implement step
+        userId = response.jsonPath().getLong("");
     }
 }

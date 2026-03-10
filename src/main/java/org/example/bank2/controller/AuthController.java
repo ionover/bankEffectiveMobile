@@ -3,12 +3,18 @@ package org.example.bank2.controller;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.LoginDto;
 import org.example.bank2.entity.User;
+import org.example.bank2.exception.UnauthorizedException;
 import org.example.bank2.service.UserService;
 import org.example.bank2.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/oauth")
@@ -28,12 +34,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> getToken(@RequestBody @Valid LoginDto loginDto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getLogin(),
-                        loginDto.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDto.getLogin(),
+                            loginDto.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new UnauthorizedException("Неверный логин или пароль");
+        }
 
         User user = userService.getUserByLogin(loginDto.getLogin());
 

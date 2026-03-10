@@ -7,6 +7,7 @@ public class UserTemplates {
     public static UserRequest getUserTemplate(String template) {
         return switch (template) {
             case "по-умолчанию" -> defaultUser();
+            case "обычный пользователь" -> standardUser();
             case "администратор" -> administrator();
             case "не администратор" -> notAdmin();
             default -> throw new IllegalArgumentException("Для '" + template + "' нет шаблона");
@@ -44,6 +45,18 @@ public class UserTemplates {
                 "Не админ",
                 "Не администраторов",
                 "Не админович",
+                "+7900000000",
+                false
+        );
+    }
+
+    public static UserRequest standardUser() {
+        return new UserRequest(
+                "standart@ru",
+                "12",
+                "Обычный",
+                "Обычный",
+                "Обычный",
                 "+7900000000",
                 false
         );

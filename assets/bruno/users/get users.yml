@@ -8,7 +8,7 @@ http:
   url: http://10.10.10.61:8084/users
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzQxMCwiZXhwIjoxNzczMjEzODEwfQ.yNK4pkgQeWlQ8X5sEdXYKT5kIlP2rTb_fjjiGUQqUF4
+    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzE0NzQ2MCwiZXhwIjoxNzczMjMzODYwfQ.W11DK3xwWRw07VOXgf5lzva3xaTqLq3QH0DXv_bIQ5s
 
 settings:
   encodeUrl: true

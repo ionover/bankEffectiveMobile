@@ -30,8 +30,8 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable) {
-        Page<User> users = userService.getAllUsers(pageable);
+    public ResponseEntity<Page<UserProjection>> getAllUsers(Pageable pageable) {
+        Page<UserProjection> users = userService.getAllUsers(pageable);
 
         return ResponseEntity.ok(users);
     }
