@@ -1,17 +1,11 @@
 info:
-  name: patch user
+  name: get users by id
   type: http
-  seq: 6
+  seq: 3
 
 http:
-  method: PATCH
+  method: GET
   url: http://10.10.10.61:8084/users/2
-  body:
-    type: json
-    data: |-
-      {
-        "name": "name12"
-      }
   auth:
     type: bearer
     token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzEyNzQxMCwiZXhwIjoxNzczMjEzODEwfQ.yNK4pkgQeWlQ8X5sEdXYKT5kIlP2rTb_fjjiGUQqUF4

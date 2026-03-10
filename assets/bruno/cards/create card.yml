@@ -1,0 +1,16 @@
+info:
+  name: create card
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://10.10.10.61:8084/cards
+  auth:
+    type: bearer
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
