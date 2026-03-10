@@ -6,9 +6,9 @@ import io.cucumber.java.en.Then;
 
 public class UsersCrudSteps {
 
-    @Given("Admin is logged in")
-    public void adminIsLoggedIn() {
-        // TODO: Implement step
+    @Given("я создаю пользователя по шаблону {string}")
+    public void createUserByTemplate(String template) {
+
     }
 
     @When("Admin creates a user with name {string}")
