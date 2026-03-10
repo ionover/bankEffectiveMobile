@@ -6,8 +6,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.bank2.dto.CardRequest;
+import org.example.bank2.dto.CardResponse;
 import org.example.bank2.dto.CardStatusUpdateRequest;
 import org.example.bank2.dto.enums.Status;
+
+import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static ogr.exapmle.asseptensetest.BaseSteps.*;
@@ -28,7 +32,7 @@ public class CardCrudSteps {
                 .when()
                 .post(BASE_URL + "/cards");
 
-        if (response.statusCode() == 201 || response.statusCode() == 200) {
+        if (response.statusCode() == 201) {
             cardId = response.jsonPath().getLong("id");
         }
     }
@@ -79,6 +83,11 @@ public class CardCrudSteps {
 
     @And("в списке карт есть текущая карта")
     public void checkCardInList() {
-        assertTrue(response.prettyPrint().contains("\"id\":" + cardId));
+        List<CardResponse> cards = response.jsonPath().getList("content", CardResponse.class);
+        Optional<CardResponse> currentCard = cards.stream()
+                .filter(card -> cardId.equals(card.getId()))
+                .findFirst();
+
+        assertTrue(currentCard.isPresent());
     }
 }

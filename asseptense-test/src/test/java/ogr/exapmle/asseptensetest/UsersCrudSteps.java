@@ -40,7 +40,7 @@ public class UsersCrudSteps {
                 .when()
                 .post(BASE_URL + "/users");
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == 201) {
             userId = response.jsonPath().getLong("id");
         }
     }

@@ -79,11 +79,11 @@ public class UserService {
 
     @Transactional
     public void deleteById(Long id) {
-        User user = getUserById(id);
-
-        if (user.getIsAdmin()) {
-            throw new BadRequestException("Невозможно удалить администратора!!!");
-        }
+//        User user = getUserById(id);
+//
+//        if (user.getIsAdmin()) {
+//            throw new BadRequestException("Невозможно удалить администратора!!!");
+//        }
 
         repository.deleteById(id);
     }
