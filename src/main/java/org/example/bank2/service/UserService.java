@@ -6,11 +6,14 @@ import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.resilience.annotation.Retryable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import static org.example.bank2.mapper.UserMapper.userMapper;
 
@@ -19,31 +22,38 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
+    private final BCryptPasswordEncoder encoder;
     private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(BCryptPasswordEncoder encoder, UserRepository repository) {
+        this.encoder = encoder;
         this.repository = repository;
     }
 
-    public Stream<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        repository.findAll().forEach(users::add);
-
-        return users.stream();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public User getUserById(Long id) {
-        return repository.findById(id)
+        return repository.findUserById(id)
                          .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
     }
 
     public User getUserByLogin(String login) {
-        return repository.findByLogin(login)
+        return repository.findUserByLogin(login)
                          .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
     }
 
+    @Transactional
     public User createUser(User user) {
         log.debug("Попросили создать пользователя {}", user);
+
+        Optional<User> olUser = repository.findUserByLogin(user.getLogin());
+        if (olUser.isPresent()) {
+            throw new BadRequestException("Указанный email '" + user.getLogin() + "' занят. Выберете другой!");
+        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
 
         return repository.save(user);
     }

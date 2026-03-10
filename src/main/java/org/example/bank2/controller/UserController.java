@@ -4,14 +4,14 @@ import jakarta.validation.Valid;
 import org.example.bank2.dto.UserRequest;
 import org.example.bank2.entity.User;
 import org.example.bank2.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static org.example.bank2.mapper.UserMapper.userMapper;
 import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
@@ -28,10 +28,10 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<List<User>> getAllUsers() {
-        Stream<User> users = userService.getAllUsers();
+    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable) {
+        Page<User> users = userService.getAllUsers(pageable);
 
-        return ResponseEntity.ok(users.toList());
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
