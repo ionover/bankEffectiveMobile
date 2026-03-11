@@ -10,8 +10,9 @@ REST-сервис для управления пользователями, ба
 
 ## Документация API
 
-- Swagger UI (GitHub Pages): https://ionover.github.io/bank2/
+- Swagger UI (GitHub Pages): https://ionover.github.io/bankEffectiveMobile
 - Локально после запуска: `http://localhost:8084/swagger-ui/index.html`
+- Bruno коллекция в assets/bruno
 
 ## Быстрый старт
 
@@ -53,4 +54,4 @@ scripts\run-asseptense.bat
 ```
 
 Пример feature-файла:
-https://github.com/ionover/bank2/blob/main/asseptense-test/src/test/resources/ogr/exapmle/asseptensetest/Login.feature
+https://github.com/ionover/bankEffectiveMobile/blob/main/asseptense-test/src/test/resources/ogr/exapmle/asseptensetest/Login.feature
