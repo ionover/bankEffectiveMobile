@@ -1,20 +1,14 @@
 info:
-  name: cteate user
+  name: top on balanse
   type: http
   seq: 1
 
 http:
   method: POST
-  url: http://localhost:8084/users
+  url: http://localhost:8084/operations/topOnBalance/1
   body:
     type: json
-    data: |-
-      {
-        "login": "name1",
-        "password": "123",
-        "surname": "surname",
-        "isAdmin": false
-      }
+    data: "1000"
   auth:
     type: bearer
     token: ey

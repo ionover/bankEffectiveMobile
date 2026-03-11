@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: http://10.10.10.61:8084/oauth/login
+  url: http://localhost:8084/oauth/login
   body:
     type: json
     data: |-

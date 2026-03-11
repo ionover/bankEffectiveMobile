@@ -1,19 +1,18 @@
 info:
-  name: cteate user
+  name: transferMoney
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
-  url: http://localhost:8084/users
+  url: http://localhost:8084/operations/transferMoney
   body:
     type: json
     data: |-
       {
-        "login": "name1",
-        "password": "123",
-        "surname": "surname",
-        "isAdmin": false
+        "cardFromId": 1,
+        "cardWhereId": 2,
+        "money": 500
       }
   auth:
     type: bearer

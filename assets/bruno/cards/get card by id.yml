@@ -5,13 +5,13 @@ info:
 
 http:
   method: GET
-  url: http://10.10.10.61:8084/cards/1
+  url: http://localhost:8084/cards/1
   body:
     type: json
     data: ""
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzeXN0ZW1BZG1pbkBtYWlsLmNvbSIsImlhdCI6MTc3MzIxMDEwNSwiZXhwIjoxNzczMjk2NTA1fQ.yuCVKe8-QIT4UmNemUZiMLfqILkxaRIClhbBzz6_BhU
+    token: ey
 
 settings:
   encodeUrl: true

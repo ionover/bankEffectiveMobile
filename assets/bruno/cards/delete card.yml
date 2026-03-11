@@ -1,11 +1,14 @@
 info:
-  name: get users by id
+  name: delete card
   type: http
-  seq: 3
+  seq: 5
 
 http:
-  method: GET
-  url: http://localhost:8084/users/2
+  method: DELETE
+  url: http://localhost:8084/cards/1
+  body:
+    type: json
+    data: ""
   auth:
     type: bearer
     token: ey
