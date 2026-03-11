@@ -4,8 +4,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.example.bank2.dto.TransferMoneyRequest;
 
-import java.util.HashMap;
-
 import static io.restassured.RestAssured.given;
 import static ogr.exapmle.asseptensetest.BaseSteps.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +16,7 @@ public class OperationsSteps {
         response = given()
                 .header("Authorization", "Bearer " + TOKEN)
                 .header("Content-Type", "application/json")
-                .body(gson.toJson(new HashMap<>() {{
-                    put("depositAmount", amount);
-                }}))
+                .body(gson.toJson(amount))
                 .when()
                 .post(BASE_URL + "/operations/topOnBalance/" + cardId);
     }
