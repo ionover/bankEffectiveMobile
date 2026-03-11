@@ -95,4 +95,16 @@ public class Card {
     public void setBalance(Long balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + (id == null ? "null" : "\"" + id + "\"") + ", " +
+                "\"number\":" + (number == null ? "null" : "\"" + number + "\"") + ", " +
+                "\"owner\":" + (owner == null ? "null" : owner) + ", " +
+                "\"validityPeriod\":" + (validityPeriod == null ? "null" : validityPeriod) + ", " +
+                "\"status\":" + (status == null ? "null" : status) + ", " +
+                "\"balance\":" + (balance == null ? "null" : "\"" + balance + "\"") +
+                "}";
+    }
 }

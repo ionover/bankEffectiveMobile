@@ -99,7 +99,7 @@ public class CardService {
     }
 
     @Transactional
-    public Card topOnBalance(Card card) {
+    public Card updateCard(Card card) {
         return repository.save(card);
     }
 

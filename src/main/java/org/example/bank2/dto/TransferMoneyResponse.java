@@ -13,6 +13,11 @@ public class TransferMoneyResponse {
     public TransferMoneyResponse() {
     }
 
+    public TransferMoneyResponse(Long cardFromBalance, Long cardWhereBalance) {
+        this.cardFromBalance = cardFromBalance;
+        this.cardWhereBalance = cardWhereBalance;
+    }
+
     public Long getCardFromBalance() {
         return cardFromBalance;
     }

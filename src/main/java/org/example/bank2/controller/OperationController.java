@@ -36,8 +36,15 @@ public class OperationController {
             throw new BadRequestException("Сумма перевода должна быть больше нуля!!!");
         }
 
-        TransferMoneyResponse response = operationsService.transferMoney();
+        TransferMoneyResponse response = operationsService.transferMoney(transferMoneyRequest);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/frieze/{cardId}")
+    public ResponseEntity<Object> frieze(@PathVariable Long cardId) {
+        operationsService.friezeCard(cardId);
+
+        return ResponseEntity.notFound().build();
     }
 }
