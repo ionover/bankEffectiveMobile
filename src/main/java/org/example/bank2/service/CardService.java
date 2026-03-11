@@ -34,14 +34,16 @@ public class CardService {
         this.userService = userService;
     }
 
-    public Page<CardResponse> getAllCards(Pageable pageable) {
+    public Page<CardResponse> getAllCards(Pageable pageable, String number, CardStatus status, Long balance) {
         if (isAdmin()) {
-            return repository.findAll(pageable).map(this::mapToResponse);
+            return repository.findAllByFilters(number, status, balance, pageable)
+                             .map(this::mapToResponse);
         }
 
         User user = userService.getUserByLogin(getCurrentUserLogin());
 
-        return repository.findAllByOwnerId(user.getId(), pageable).map(this::mapToResponse);
+        return repository.findAllByOwnerIdAndFilters(user.getId(), number, status, balance, pageable)
+                         .map(this::mapToResponse);
     }
 
     public CardResponse getCardById(Long id) {

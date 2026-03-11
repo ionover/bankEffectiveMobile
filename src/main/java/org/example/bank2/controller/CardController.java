@@ -31,8 +31,11 @@ public class CardController {
 
     @GetMapping
     @PreAuthorize(HAS_ANY_AUTHORITY)
-    public ResponseEntity<Page<CardResponse>> getAll(Pageable pageable) {
-        Page<CardResponse> cards = cardService.getAllCards(pageable);
+    public ResponseEntity<Page<CardResponse>> getAll(Pageable pageable,
+                                                     @RequestParam(required = false) String number,
+                                                     @RequestParam(required = false) CardStatus status,
+                                                     @RequestParam(required = false) Long balance) {
+        Page<CardResponse> cards = cardService.getAllCards(pageable, number, status, balance);
 
         return ResponseEntity.ok(cards);
     }
