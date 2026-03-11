@@ -41,4 +41,12 @@ public class OperationsSteps {
                 .when()
                 .post(BASE_URL + "/operations/transferMoney");
     }
+
+    @When("я прошу заблокировать последнюю карту")
+    public void friezeLastCard() {
+        response = given()
+                .header("Authorization", "Bearer " + TOKEN)
+                .when()
+                .post(BASE_URL + "/operations/frieze/" + cardId);
+    }
 }
