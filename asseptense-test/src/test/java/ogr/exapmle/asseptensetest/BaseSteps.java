@@ -63,4 +63,9 @@ public class BaseSteps {
                     .delete(BASE_URL + "/users/" + id);
         }
     }
+
+    @Given("очищен пул созданных ранее карт")
+    public void clearCreatedCards() {
+        createdCards.clear();
+    }
 }
