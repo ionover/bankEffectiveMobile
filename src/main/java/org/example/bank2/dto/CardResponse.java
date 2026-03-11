@@ -1,6 +1,6 @@
 package org.example.bank2.dto;
 
-import org.example.bank2.dto.enums.Status;
+import org.example.bank2.dto.enums.CardStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ public class CardResponse {
     private String number;
     private Long ownerId;
     private LocalDateTime validityPeriod;
-    private Status status;
+    private CardStatus status;
     private Long balance;
 
     public CardResponse() {
@@ -20,7 +20,7 @@ public class CardResponse {
                         String number,
                         Long ownerId,
                         LocalDateTime validityPeriod,
-                        Status status,
+                        CardStatus status,
                         Long balance) {
         this.id = id;
         this.number = number;
@@ -62,11 +62,11 @@ public class CardResponse {
         this.validityPeriod = validityPeriod;
     }
 
-    public Status getStatus() {
+    public CardStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(CardStatus status) {
         this.status = status;
     }
 

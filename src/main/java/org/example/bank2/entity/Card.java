@@ -2,7 +2,7 @@ package org.example.bank2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import org.example.bank2.dto.enums.Status;
+import org.example.bank2.dto.enums.CardStatus;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +26,7 @@ public class Card {
     private LocalDateTime validityPeriod;
 
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private CardStatus status;
 
     @Column
     private Long balance;
@@ -39,7 +39,7 @@ public class Card {
         this.owner = owner;
     }
 
-    public Card(Long id, String number, User owner, LocalDateTime validityPeriod, Status status, Long balance) {
+    public Card(Long id, String number, User owner, LocalDateTime validityPeriod, CardStatus status, Long balance) {
         this.id = id;
         this.number = number;
         this.owner = owner;
@@ -80,11 +80,11 @@ public class Card {
         this.validityPeriod = validityPeriod;
     }
 
-    public Status getStatus() {
+    public CardStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(CardStatus status) {
         this.status = status;
     }
 

@@ -1,11 +1,13 @@
 package org.example.bank2.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.example.bank2.entity.User;
 
 public class CardRequest {
 
     @NotNull
+    @Size(min = 4, max = 20)
     private String number;
 
     @NotNull

@@ -1,7 +1,7 @@
 package org.example.bank2.dto.enums;
 
-public enum Status {
+public enum CardStatus {
     ACTIVE,
-    BLOCKED
-//    EXPIRE
+    BLOCKED,
+    FRIEZE
 }

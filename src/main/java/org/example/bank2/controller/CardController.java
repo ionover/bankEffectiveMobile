@@ -3,7 +3,7 @@ package org.example.bank2.controller;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
-import org.example.bank2.dto.CardStatusUpdateRequest;
+import org.example.bank2.dto.enums.CardStatus;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.service.CardService;
@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import static org.example.bank2.security.Authorities.ADMIN_AUTHORITY;
 import static org.example.bank2.security.Authorities.HAS_ANY_AUTHORITY;
-import static org.example.bank2.security.Authorities.USER;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -56,17 +55,9 @@ public class CardController {
 
     @PatchMapping("/{id}/status")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Objects> updateCard(@RequestBody @Valid CardStatusUpdateRequest request,
+    public ResponseEntity<Objects> updateCard(@RequestBody @Valid CardStatus status,
                                               @PathVariable Long id) {
-        cardService.updateCardStatus(id, request.getStatus());
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/block-request")
-    @PreAuthorize("hasAuthority('" + USER + "')")
-    public ResponseEntity<Objects> requestBlock(@PathVariable Long id) {
-        cardService.requestCardBlock(id);
+        cardService.updateCardStatus(id, status);
 
         return ResponseEntity.noContent().build();
     }

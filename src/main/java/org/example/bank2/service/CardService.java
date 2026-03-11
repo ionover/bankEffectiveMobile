@@ -1,7 +1,8 @@
 package org.example.bank2.service;
 
+import jakarta.transaction.Transactional;
 import org.example.bank2.dto.CardResponse;
-import org.example.bank2.dto.enums.Status;
+import org.example.bank2.dto.enums.CardStatus;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
@@ -16,8 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.example.bank2.dto.enums.Status.ACTIVE;
-import static org.example.bank2.dto.enums.Status.BLOCKED;
+import static org.example.bank2.dto.enums.CardStatus.ACTIVE;
 import static org.example.bank2.security.Authorities.getCurrentUserLogin;
 import static org.example.bank2.security.Authorities.isAdmin;
 
@@ -79,7 +79,7 @@ public class CardService {
         repository.deleteById(id);
     }
 
-    public void updateCardStatus(Long id, Status status) {
+    public void updateCardStatus(Long id, CardStatus status) {
         Card card = getCardEntityById(id);
 
         card.setStatus(status);
@@ -87,14 +87,7 @@ public class CardService {
         repository.save(card);
     }
 
-    public void requestCardBlock(Long id) {
-        Card card = getAccessibleCardById(id);
-
-        card.setStatus(BLOCKED);
-        repository.save(card);
-    }
-
-    private Card getAccessibleCardById(Long id) {
+    public Card getAccessibleCardById(Long id) {
         if (isAdmin()) {
             return getCardEntityById(id);
         }
@@ -105,6 +98,11 @@ public class CardService {
                          .orElseThrow(() -> new ForbiddenException("Карта недоступна текущему пользователю"));
     }
 
+    @Transactional
+    public Card topOnBalance(Card card) {
+        return repository.save(card);
+    }
+
     private Card getCardEntityById(Long id) {
         return repository.findById(id)
                          .orElseThrow(() -> new BadRequestException("Карта с ID " + id + " не найдена"));
@@ -113,11 +111,15 @@ public class CardService {
     private CardResponse mapToResponse(Card card) {
         return new CardResponse(
                 card.getId(),
-                card.getNumber(),
+                maskCardNumber(card.getNumber()),
                 card.getOwner().getId(),
                 card.getValidityPeriod(),
                 card.getStatus(),
                 card.getBalance()
         );
+    }
+
+    private String maskCardNumber(String number) {
+        return "**** **** **** " + number.substring(number.length() - 4);
     }
 }

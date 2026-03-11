@@ -8,7 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
 import org.example.bank2.dto.CardStatusUpdateRequest;
-import org.example.bank2.dto.enums.Status;
+import org.example.bank2.dto.enums.CardStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +39,7 @@ public class CardCrudSteps {
 
     @When("я меняю статус текущей карты на {string}")
     public void changeCardStatus(String status) {
-        CardStatusUpdateRequest request = new CardStatusUpdateRequest(Status.valueOf(status));
+        CardStatusUpdateRequest request = new CardStatusUpdateRequest(CardStatus.valueOf(status));
 
         response = given()
                 .header("Authorization", "Bearer " + TOKEN)
