@@ -3,7 +3,7 @@ LABEL MAINTAINER="ionov <java>"
 
 RUN apk --no-cache add curl
 
-COPY ./target/bankEffectiveMobile-0.0.1-SNAPSHOT.jar bankEffectiveMobile.jar
+COPY ./target/bankEffectiveMobile-0.0.1-SNAPSHOT-exec.jar bankEffectiveMobile.jar
 
 EXPOSE 8084
 
