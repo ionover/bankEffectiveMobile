@@ -7,6 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,10 +21,12 @@ public class BaseSteps {
     public static String TOKEN;
     public static Long userId;
     public static Long cardId;
+    public static List<Long> createdCards = new ArrayList<>();
 
     public static Response response;
     public static Gson gson = new Gson();
-    public static Random random = new Random();
+
+
 
     @Then("сервер отвечает статусом {int}")
     public void checkStatus(int status) {

@@ -7,8 +7,6 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
-import org.example.bank2.dto.CardStatusUpdateRequest;
-import org.example.bank2.dto.enums.CardStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,17 +32,16 @@ public class CardCrudSteps {
 
         if (response.statusCode() == 201) {
             cardId = response.jsonPath().getLong("id");
+            createdCards.add(cardId);
         }
     }
 
     @When("я меняю статус текущей карты на {string}")
     public void changeCardStatus(String status) {
-        CardStatusUpdateRequest request = new CardStatusUpdateRequest(CardStatus.valueOf(status));
-
         response = given()
                 .header("Authorization", "Bearer " + TOKEN)
                 .header("Content-Type", "application/json")
-                .body(gson.toJson(request))
+                .body(gson.toJson(status))
                 .when()
                 .patch(BASE_URL + "/cards/" + cardId + "/status");
     }
@@ -85,8 +82,8 @@ public class CardCrudSteps {
     public void checkCardInList() {
         List<CardResponse> cards = response.jsonPath().getList("content", CardResponse.class);
         Optional<CardResponse> currentCard = cards.stream()
-                .filter(card -> cardId.equals(card.getId()))
-                .findFirst();
+                                                  .filter(card -> cardId.equals(card.getId()))
+                                                  .findFirst();
 
         assertTrue(currentCard.isPresent());
     }
