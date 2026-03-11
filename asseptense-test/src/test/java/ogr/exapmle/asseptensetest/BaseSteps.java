@@ -68,4 +68,9 @@ public class BaseSteps {
     public void clearCreatedCards() {
         createdCards.clear();
     }
+
+    @Given("токен забыт")
+    public void clearToken() {
+        TOKEN = "";
+    }
 }
