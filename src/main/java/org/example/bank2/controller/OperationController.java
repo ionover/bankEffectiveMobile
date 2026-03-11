@@ -45,6 +45,6 @@ public class OperationController {
     public ResponseEntity<Object> frieze(@PathVariable Long cardId) {
         operationsService.friezeCard(cardId);
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }
