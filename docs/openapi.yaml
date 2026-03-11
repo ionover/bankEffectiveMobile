@@ -1,0 +1,623 @@
+openapi: 3.0.3
+info:
+  title: Bank Effective Mobile API
+  version: 1.0.0
+  description: |
+    Static API documentation for the bank2 project.
+    This spec is intended for GitHub Pages preview.
+servers:
+  - url: /
+    description: Relative URL (documentation mode)
+tags:
+  - name: Auth
+  - name: Users
+  - name: Cards
+  - name: Operations
+paths:
+  /oauth/login:
+    post:
+      tags: [Auth]
+      summary: Login and get JWT token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: JWT token
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /users:
+    get:
+      tags: [Users]
+      summary: Get all users (paginated)
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Users page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageUserProjection'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+    post:
+      tags: [Users]
+      summary: Create user
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '201':
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProjection'
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /users/{id}:
+    get:
+      tags: [Users]
+      summary: Get user by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProjection'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+    patch:
+      tags: [Users]
+      summary: Update user
+      description: Login cannot be changed. Empty password is not allowed.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProjection'
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+    delete:
+      tags: [Users]
+      summary: Delete user by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /cards:
+    get:
+      tags: [Cards]
+      summary: Get cards (paginated + filters)
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+        - $ref: '#/components/parameters/Sort'
+        - name: number
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/CardStatus'
+        - name: balance
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Cards page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageCardResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+    post:
+      tags: [Cards]
+      summary: Create card
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardRequest'
+      responses:
+        '201':
+          description: Created card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /cards/{id}:
+    get:
+      tags: [Cards]
+      summary: Get card by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+    delete:
+      tags: [Cards]
+      summary: Delete card by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /cards/{id}/status:
+    patch:
+      tags: [Cards]
+      summary: Update card status
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardStatus'
+            examples:
+              active:
+                value: ACTIVE
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /operations/topOnBalance/{cardId}:
+    post:
+      tags: [Operations]
+      summary: Top up card balance
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              description: Deposit amount
+            examples:
+              sample:
+                value: 1000
+      responses:
+        '200':
+          description: Top up result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmountResponse'
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /operations/transferMoney:
+    post:
+      tags: [Operations]
+      summary: Transfer money between cards
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferMoneyRequest'
+      responses:
+        '200':
+          description: Transfer result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferMoneyResponse'
+        '400':
+          description: Validation/business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /operations/frieze/{cardId}:
+    post:
+      tags: [Operations]
+      summary: Frieze card
+      description: Path name matches the controller method spelling.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+      description: Page number (0-based)
+    Size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+      description: Page size
+    Sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: true
+      description: Sort format is property,(asc|desc)
+  schemas:
+    LoginDto:
+      type: object
+      required: [login, password]
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    UserRequest:
+      type: object
+      required: [login, password, surname, isAdmin]
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        surname:
+          type: string
+        isAdmin:
+          type: boolean
+        name:
+          type: string
+        middleName:
+          type: string
+        phone:
+          type: string
+    UserProjection:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        login:
+          type: string
+        surname:
+          type: string
+        isAdmin:
+          type: boolean
+        middleName:
+          type: string
+        phone:
+          type: string
+        name:
+          type: string
+    CardRequest:
+      type: object
+      required: [number, owner]
+      properties:
+        number:
+          type: string
+          minLength: 4
+          maxLength: 20
+        owner:
+          type: integer
+          format: int64
+          description: User id
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: string
+        ownerId:
+          type: integer
+          format: int64
+        validityPeriod:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        balance:
+          type: integer
+          format: int64
+    TransferMoneyRequest:
+      type: object
+      required: [cardFromId, cardWhereId, money]
+      properties:
+        cardFromId:
+          type: integer
+          format: int64
+        cardWhereId:
+          type: integer
+          format: int64
+        money:
+          type: integer
+          format: int64
+    TransferMoneyResponse:
+      type: object
+      properties:
+        cardFromBalance:
+          type: integer
+          format: int64
+        cardWhereBalance:
+          type: integer
+          format: int64
+        operationStatus:
+          $ref: '#/components/schemas/OperationStatus'
+        message:
+          type: string
+    AmountResponse:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currentBalance:
+          type: integer
+          format: int64
+        status:
+          $ref: '#/components/schemas/OperationStatus'
+        message:
+          type: string
+    ApiErrorModel:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-03-11T12:00:00"
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+    CardStatus:
+      type: string
+      enum: [ACTIVE, BLOCKED, FRIEZE]
+    OperationStatus:
+      type: string
+      enum: [SUCCESS, FAILURE]
+    PageUserProjection:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserProjection'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        number:
+          type: integer
+        size:
+          type: integer
+        first:
+          type: boolean
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    PageCardResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardResponse'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        number:
+          type: integer
+        size:
+          type: integer
+        first:
+          type: boolean
+        last:
+          type: boolean
+        empty:
+          type: boolean
