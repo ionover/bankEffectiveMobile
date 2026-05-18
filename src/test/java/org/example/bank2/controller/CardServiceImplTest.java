@@ -1,12 +1,13 @@
 package org.example.bank2.controller;
 
 import org.example.bank2.dto.CardResponse;
+import org.example.bank2.dto.UserProjection;
 import org.example.bank2.dto.enums.CardStatus;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.repository.CardRepository;
-import org.example.bank2.service.CardService;
-import org.example.bank2.service.UserService;
+import org.example.bank2.service.CardServiceImpl;
+import org.example.bank2.service.UserServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,16 +28,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CardServiceTest {
+public class CardServiceImplTest {
 
     @Mock
     private CardRepository repository;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @InjectMocks
-    private CardService cardService;
+    private CardServiceImpl cardService;
 
     @AfterEach
     void clearSecurityContext() {
@@ -122,8 +123,8 @@ public class CardServiceTest {
         String numberFilter = "7777";
         CardStatus statusFilter = CardStatus.ACTIVE;
         Long balanceFilter = 2_500L;
-        User currentUser = new User(77L);
-        when(userService.getUserByLogin("user-login")).thenReturn(currentUser);
+        UserProjection currentUser = new UserProjection(77L);
+        when(userService.getUserProjectionByLogin("user-login")).thenReturn(currentUser);
         Page<Card> cardsPage = new PageImpl<>(List.of(
                 card(6L, "9999000077771234", 77L, CardStatus.ACTIVE, 2_500L)
         ), pageable, 1);
@@ -135,7 +136,7 @@ public class CardServiceTest {
         assertEquals(1, result.getContent().size());
         assertEquals(77L, result.getContent().get(0).getOwnerId());
         assertEquals("**** **** **** 1234", result.getContent().get(0).getNumber());
-        verify(userService).getUserByLogin("user-login");
+        verify(userService).getUserProjectionByLogin("user-login");
         verify(repository).findAllByOwnerIdAndFilters(77L, numberFilter, statusFilter, balanceFilter, pageable);
     }
 

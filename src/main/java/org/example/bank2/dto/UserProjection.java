@@ -19,6 +19,10 @@ public class UserProjection {
     public UserProjection() {
     }
 
+    public UserProjection(Long id) {
+        this.id = id;
+    }
+
     public UserProjection(Long id, String login, String surname, Boolean isAdmin, String middleName,
                           String phone, String name) {
         this.id = id;

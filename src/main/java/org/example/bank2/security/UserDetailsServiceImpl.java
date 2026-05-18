@@ -1,7 +1,7 @@
 package org.example.bank2.security;
 
 import org.example.bank2.entity.User;
-import org.example.bank2.service.UserService;
+import org.example.bank2.service.UserServiceImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,9 +16,9 @@ import static org.example.bank2.security.Authorities.USER;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserDetailsServiceImpl(UserService userService) {
+    public UserDetailsServiceImpl(UserServiceImpl userService) {
         this.userService = userService;
     }
 

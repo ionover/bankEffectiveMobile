@@ -1,7 +1,7 @@
 package org.example.bank2.controller;
 
 import org.example.bank2.dto.CardResponse;
-import org.example.bank2.service.CardService;
+import org.example.bank2.service.CardServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ class CardControllerTest {
     void getCardReturnsCardFromService() {
         CardResponse expected = new CardResponse();
         expected.setId(1L);
-        CardService cardService = new CardService(null, null) {
+        CardServiceImpl cardService = new CardServiceImpl(null, null) {
             @Override
             public CardResponse getCardById(Long id) {
                 return expected;

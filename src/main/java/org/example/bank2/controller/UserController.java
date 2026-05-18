@@ -3,7 +3,6 @@ package org.example.bank2.controller;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.UserProjection;
 import org.example.bank2.dto.UserRequest;
-import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.service.UserService;
 import org.springframework.data.domain.Page;
