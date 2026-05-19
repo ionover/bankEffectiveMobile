@@ -1,15 +1,19 @@
 package org.example.bank2.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.example.bank2.entity.User;
 
+@Schema(description = "Запрос на создание банковской карты")
 public class CardRequest {
 
+    @Schema(description = "Номер карты", example = "1234567890123456", minLength = 4, maxLength = 20,
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     @Size(min = 4, max = 20)
     private String number;
 
+    @Schema(description = "ID владельца карты", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long owner;
 

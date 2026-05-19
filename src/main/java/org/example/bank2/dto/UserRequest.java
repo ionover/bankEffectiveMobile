@@ -1,25 +1,37 @@
 package org.example.bank2.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.example.bank2.controller.OnCreate;
 
+@Schema(description = "Запрос на создание или обновление пользователя")
 public class UserRequest {
 
+    @Schema(description = "Логин пользователя. Обязателен при создании и не изменяется при обновлении",
+            example = "user@mail.com")
     @NotBlank(groups = OnCreate.class)
     private String login;
 
+    @Schema(description = "Пароль пользователя. Обязателен при создании", example = "password123")
     @NotBlank(groups = OnCreate.class)
     private String password;
 
+    @Schema(description = "Фамилия пользователя. Обязательна при создании", example = "Иванов")
     @NotBlank(groups = OnCreate.class)
     private String surname;
 
+    @Schema(description = "Признак администратора. Обязателен при создании", example = "false")
     @NotNull(groups = OnCreate.class)
     private Boolean isAdmin;
 
+    @Schema(description = "Имя пользователя", example = "Иван")
     private String name;
+
+    @Schema(description = "Отчество пользователя", example = "Иванович")
     private String middleName;
+
+    @Schema(description = "Телефон пользователя", example = "+79991234567")
     private String phone;
 
     public UserRequest() {

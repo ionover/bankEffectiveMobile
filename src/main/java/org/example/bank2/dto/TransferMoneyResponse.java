@@ -1,13 +1,21 @@
 package org.example.bank2.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.example.bank2.dto.enums.OperationStatus;
 
+@Schema(description = "Результат перевода денег между картами")
 public class TransferMoneyResponse {
 
+    @Schema(description = "Баланс карты списания после перевода", example = "4000")
     private Long cardFromBalance;
+
+    @Schema(description = "Баланс карты зачисления после перевода", example = "6000")
     private Long cardWhereBalance;
 
+    @Schema(description = "Статус операции", example = "SUCCESS", allowableValues = {"SUCCESS", "FAILURE"})
     private OperationStatus operationStatus;
+
+    @Schema(description = "Сообщение с результатом операции", example = "Перевод выполнен успешно")
     private String message;
 
     public TransferMoneyResponse() {
@@ -50,4 +58,3 @@ public class TransferMoneyResponse {
         this.message = message;
     }
 }
-

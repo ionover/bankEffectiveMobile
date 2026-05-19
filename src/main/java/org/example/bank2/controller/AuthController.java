@@ -1,5 +1,7 @@
 package org.example.bank2.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.LoginDto;
 import org.example.bank2.dto.UserProjection;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/oauth")
+@Tag(name = "Authentication", description = "Аутентификация пользователей")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -32,6 +35,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Получить JWT токен",
+               description = "Проверяет логин и пароль пользователя и возвращает JWT токен",
+               security = {})
     public ResponseEntity<String> getToken(@RequestBody @Valid LoginDto loginDto) {
         try {
             authenticationManager.authenticate(

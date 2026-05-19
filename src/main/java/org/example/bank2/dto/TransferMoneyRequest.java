@@ -1,14 +1,20 @@
 package org.example.bank2.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import org.example.bank2.dto.enums.OperationStatus;
 
+@Schema(description = "Запрос на перевод денег между картами")
 public class TransferMoneyRequest {
 
+    @Schema(description = "ID карты списания", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long cardFromId;
+
+    @Schema(description = "ID карты зачисления", example = "2", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long cardWhereId;
+
+    @Schema(description = "Сумма перевода", example = "1000", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long money;
 
@@ -39,4 +45,3 @@ public class TransferMoneyRequest {
         this.money = money;
     }
 }
-

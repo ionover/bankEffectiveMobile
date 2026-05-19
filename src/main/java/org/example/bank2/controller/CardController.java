@@ -1,5 +1,9 @@
 package org.example.bank2.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
@@ -7,6 +11,7 @@ import org.example.bank2.dto.enums.CardStatus;
 import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.service.CardService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +26,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/cards")
+@Tag(name = "Cards", description = "Управление банковскими картами")
 public class CardController {
 
     private final CardService cardService;
@@ -31,9 +37,15 @@ public class CardController {
 
     @GetMapping
     @PreAuthorize(HAS_ANY_AUTHORITY)
-    public ResponseEntity<Page<CardResponse>> getAll(Pageable pageable,
+    @Operation(summary = "Получить список карт", description = "Возвращает постраничный список карт с фильтрами")
+    public ResponseEntity<Page<CardResponse>> getAll(@ParameterObject Pageable pageable,
+                                                     @Parameter(description = "Фильтр по номеру карты",
+                                                             example = "1234567890123456")
                                                      @RequestParam(required = false) String number,
+                                                     @Parameter(description = "Фильтр по статусу карты",
+                                                             schema = @Schema(allowableValues = {"ACTIVE", "BLOCKED", "FRIEZE"}))
                                                      @RequestParam(required = false) CardStatus status,
+                                                     @Parameter(description = "Фильтр по балансу карты", example = "5000")
                                                      @RequestParam(required = false) Long balance) {
         Page<CardResponse> cards = cardService.getAllCards(pageable, number, status, balance);
 
@@ -42,7 +54,9 @@ public class CardController {
 
     @GetMapping("/{id}")
     @PreAuthorize(HAS_ANY_AUTHORITY)
-    public ResponseEntity<CardResponse> getCard(@PathVariable Long id) {
+    @Operation(summary = "Получить карту по ID", description = "Возвращает информацию о банковской карте")
+    public ResponseEntity<CardResponse> getCard(@Parameter(description = "ID карты", example = "1")
+                                                @PathVariable Long id) {
         CardResponse card = cardService.getCardById(id);
 
         return ResponseEntity.ok(card);
@@ -50,6 +64,7 @@ public class CardController {
 
     @PostMapping
     @PreAuthorize(ADMIN_AUTHORITY)
+    @Operation(summary = "Создать карту", description = "Создает банковскую карту для пользователя")
     public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest request) {
         CardResponse card = cardService.createCard(new Card(request.getNumber(), new User(request.getOwner())));
 
@@ -58,7 +73,12 @@ public class CardController {
 
     @PatchMapping("/{id}/status")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Objects> updateCard(@RequestBody @Valid CardStatus status,
+    @Operation(summary = "Обновить статус карты", description = "Изменяет статус банковской карты")
+    public ResponseEntity<Objects> updateCard(@RequestBody
+                                              @Schema(description = "Новый статус карты", example = "BLOCKED",
+                                                      allowableValues = {"ACTIVE", "BLOCKED", "FRIEZE"})
+                                              @Valid CardStatus status,
+                                              @Parameter(description = "ID карты", example = "1")
                                               @PathVariable Long id) {
         cardService.updateCardStatus(id, status);
 
@@ -67,7 +87,9 @@ public class CardController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize(ADMIN_AUTHORITY)
-    public ResponseEntity<Objects> deleteCard(@PathVariable Long id) {
+    @Operation(summary = "Удалить карту", description = "Удаляет банковскую карту по ID")
+    public ResponseEntity<Objects> deleteCard(@Parameter(description = "ID карты", example = "1")
+                                              @PathVariable Long id) {
         cardService.deleteById(id);
 
         return ResponseEntity.noContent().build();
