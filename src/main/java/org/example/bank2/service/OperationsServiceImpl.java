@@ -21,9 +21,9 @@ public class OperationsServiceImpl implements OperationsService {
 
     private final Logger log = LoggerFactory.getLogger(OperationsServiceImpl.class);
 
-    private final CardServiceImpl cardService;
+    private final CardService cardService;
 
-    public OperationsServiceImpl(CardServiceImpl cardService) {
+    public OperationsServiceImpl(CardService cardService) {
         this.cardService = cardService;
     }
 

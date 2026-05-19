@@ -17,4 +17,8 @@ public interface CardService {
     void deleteById(Long id);
 
     void updateCardStatus(Long id, CardStatus status);
+
+    Card getAccessibleCardById(Long id);
+
+    Card updateCard(Card card);
 }

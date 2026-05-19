@@ -14,6 +14,8 @@ public interface UserService {
 
     UserProjection getUserProjectionByLogin(String login);
 
+    User getUserByLogin(String login);
+
     UserProjection createUser(User user);
 
     UserProjection updateUser(Long id, UserRequest updateUserRequest);

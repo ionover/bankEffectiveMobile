@@ -7,7 +7,7 @@ import org.example.bank2.entity.Card;
 import org.example.bank2.entity.User;
 import org.example.bank2.repository.CardRepository;
 import org.example.bank2.service.CardServiceImpl;
-import org.example.bank2.service.UserServiceImpl;
+import org.example.bank2.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ public class CardServiceImplTest {
     private CardRepository repository;
 
     @Mock
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @InjectMocks
     private CardServiceImpl cardService;

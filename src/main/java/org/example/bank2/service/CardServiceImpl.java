@@ -28,9 +28,9 @@ public class CardServiceImpl implements CardService {
     private final Logger log = LoggerFactory.getLogger(CardServiceImpl.class);
 
     private final CardRepository repository;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public CardServiceImpl(CardRepository repository, UserServiceImpl userService) {
+    public CardServiceImpl(CardRepository repository, UserService userService) {
         this.repository = repository;
         this.userService = userService;
     }
@@ -95,6 +95,7 @@ public class CardServiceImpl implements CardService {
         repository.save(card);
     }
 
+    @Override
     public Card getAccessibleCardById(Long id) {
         if (isAdmin()) {
             return getCardEntityById(id);
@@ -107,6 +108,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Transactional
+    @Override
     public Card updateCard(Card card) {
         return repository.save(card);
     }

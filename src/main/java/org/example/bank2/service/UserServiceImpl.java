@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
                          .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
     }
 
+    @Override
     public User getUserByLogin(String login) {
         return repository.findUserByLogin(login)
                          .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
