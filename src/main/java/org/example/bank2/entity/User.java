@@ -43,6 +43,10 @@ public class User {
     @Column
     private String name;
 
+    @Column(name = "is_deleted", nullable = false)
+    @NotNull
+    private Boolean isDeleted = false;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<Card> cards;
@@ -152,6 +156,14 @@ public class User {
         isAdmin = admin;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Set<Card> getCards() {
         return cards;
     }
@@ -171,6 +183,7 @@ public class User {
                 "\"middleName\":" + (middleName == null ? "null" : "\"" + middleName + "\"") + ", " +
                 "\"phone\":" + (phone == null ? "null" : "\"" + phone + "\"") + ", " +
                 "\"isAdmin\":" + (isAdmin == null ? "null" : "\"" + isAdmin + "\"") + ", " +
+                "\"isDeleted\":" + (isDeleted == null ? "null" : "\"" + isDeleted + "\"") + ", " +
                 "\"cards\":" + (cards == null ? "null" : Arrays.toString(cards.toArray())) +
                 "}";
     }

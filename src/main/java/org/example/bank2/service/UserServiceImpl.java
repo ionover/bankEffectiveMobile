@@ -13,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static org.example.bank2.mapper.UserMapper.userMapper;
 
 @Service
@@ -33,12 +31,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserProjection> getAllUsers(Pageable pageable) {
-        return repository.findAll(pageable).map(this::mapToUserProjection);
+        return repository.findAllByIsDeletedFalse(pageable).map(this::mapToUserProjection);
     }
 
     @Override
     public UserProjection getUserProjectionById(Long id) {
-        User user = repository.findUserById(id)
+        User user = repository.findUserByIdAndIsDeletedFalse(id)
                               .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
 
         return mapToUserProjection(user);
@@ -46,14 +44,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProjection getUserProjectionByLogin(String login) {
-        return repository.findUserByLogin(login)
+        return repository.findUserByLoginAndIsDeletedFalse(login)
                          .map(this::mapToUserProjection)
                          .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
     }
 
     @Override
     public User getUserByLogin(String login) {
-        return repository.findUserByLogin(login)
+        return repository.findUserByLoginAndIsDeletedFalse(login)
                          .orElseThrow(() -> new BadRequestException("Пользователь с login" + login + " не найден"));
     }
 
@@ -62,8 +60,7 @@ public class UserServiceImpl implements UserService {
     public UserProjection createUser(User user) {
         log.debug("Попросили создать пользователя {}", user);
 
-        Optional<User> olUser = repository.findUserByLogin(user.getLogin());
-        if (olUser.isPresent()) {
+        if (repository.existsByLogin(user.getLogin())) {
             throw new BadRequestException("Указанный email '" + user.getLogin() + "' занят. Выберете другой!");
         }
 
@@ -92,18 +89,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-//        User user = getUserById(id);
-//
-//        if (user.getIsAdmin()) {
-//            throw new BadRequestException("Невозможно удалить администратора!!!");
-//        }
-
-        repository.deleteById(id);
+        User user = getUserById(id);
+        user.setIsDeleted(true);
+        repository.save(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return repository.findUserById(id)
+        return repository.findUserByIdAndIsDeletedFalse(id)
                          .orElseThrow(() -> new BadRequestException("Пользователь с ID" + id + " не найден"));
     }
 

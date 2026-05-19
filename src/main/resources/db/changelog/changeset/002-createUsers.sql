@@ -13,6 +13,7 @@ CREATE TABLE users
     middle_name VARCHAR(255),
     phone       VARCHAR(255),
     is_admin    BOOLEAN      NOT NULL,
+    is_deleted  BOOLEAN      NOT NULL DEFAULT false,
     created_at   timestamp without time zone DEFAULT now(),
     updated_at   timestamp without time zone,
     version BIGINT NOT NULL DEFAULT 0
