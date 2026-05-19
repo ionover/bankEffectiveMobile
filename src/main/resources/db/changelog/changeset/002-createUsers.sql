@@ -1,5 +1,7 @@
 --liquibase formatted sql
 --changeset ionov:002-createUsers
+--preconditions onFail:MARK_RAN onError:HALT
+--precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = current_schema() AND table_name = 'users';
 
 CREATE TABLE users
 (
@@ -10,5 +12,8 @@ CREATE TABLE users
     name        VARCHAR(255),
     middle_name VARCHAR(255),
     phone       VARCHAR(255),
-    is_admin    BOOLEAN      NOT NULL
+    is_admin    BOOLEAN      NOT NULL,
+    created_at   timestamp without time zone DEFAULT now(),
+    updated_at   timestamp without time zone,
+    version BIGINT NOT NULL DEFAULT 0
 );

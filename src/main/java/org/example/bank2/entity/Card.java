@@ -3,6 +3,8 @@ package org.example.bank2.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.example.bank2.dto.enums.CardStatus;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +33,18 @@ public class Card {
     @Column
     private Long balance;
 
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     public Card() {
     }
 
@@ -39,13 +53,17 @@ public class Card {
         this.owner = owner;
     }
 
-    public Card(Long id, String number, User owner, LocalDateTime validityPeriod, CardStatus status, Long balance) {
+    public Card(Long id, String number, User owner, LocalDateTime validityPeriod, CardStatus status, Long balance,
+                LocalDateTime createdAt, LocalDateTime updatedAt, Long version) {
         this.id = id;
         this.number = number;
         this.owner = owner;
         this.validityPeriod = validityPeriod;
         this.status = status;
         this.balance = balance;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.version = version;
     }
 
     public Long getId() {
@@ -94,6 +112,30 @@ public class Card {
 
     public void setBalance(Long balance) {
         this.balance = balance;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @Override
