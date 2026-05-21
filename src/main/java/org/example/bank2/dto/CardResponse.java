@@ -11,7 +11,7 @@ public class CardResponse {
     @Schema(description = "ID карты", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    @Schema(description = "Номер карты", example = "1234567890123456")
+    @Schema(description = "Маскированный номер карты", example = "**** **** **** 3456")
     private String number;
 
     @Schema(description = "ID владельца карты", example = "1")

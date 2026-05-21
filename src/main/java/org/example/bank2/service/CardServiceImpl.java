@@ -1,6 +1,7 @@
 package org.example.bank2.service;
 
 import jakarta.transaction.Transactional;
+import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
 import org.example.bank2.dto.UserProjection;
 import org.example.bank2.dto.enums.CardStatus;
@@ -9,6 +10,9 @@ import org.example.bank2.entity.User;
 import org.example.bank2.exception.BadRequestException;
 import org.example.bank2.exception.ForbiddenException;
 import org.example.bank2.repository.CardRepository;
+import org.example.bank2.util.CardNumberProtector;
+import org.example.bank2.util.CardNumberProtector.CardNumberFilter;
+import org.example.bank2.util.CardNumberProtector.ProtectedCardNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,22 +33,33 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository repository;
     private final UserService userService;
+    private final CardNumberProtector cardNumberProtector;
 
-    public CardServiceImpl(CardRepository repository, UserService userService) {
+    public CardServiceImpl(CardRepository repository,
+                           UserService userService,
+                           CardNumberProtector cardNumberProtector) {
         this.repository = repository;
         this.userService = userService;
+        this.cardNumberProtector = cardNumberProtector;
     }
 
     @Override
     public Page<CardResponse> getAllCards(Pageable pageable, String number, CardStatus status, Long balance) {
+        CardNumberFilter numberFilter = cardNumberProtector.filter(number);
+
         if (isAdmin()) {
-            return repository.findAllByFilters(number, status, balance, pageable)
+            return repository.findAllByFilters(numberFilter.hash(), numberFilter.last4(), status, balance, pageable)
                              .map(this::mapToResponse);
         }
 
         UserProjection user = userService.getUserProjectionByLogin(getCurrentUserLogin());
 
-        return repository.findAllByOwnerIdAndFilters(user.getId(), number, status, balance, pageable)
+        return repository.findAllByOwnerIdAndFilters(user.getId(),
+                                                     numberFilter.hash(),
+                                                     numberFilter.last4(),
+                                                     status,
+                                                     balance,
+                                                     pageable)
                          .map(this::mapToResponse);
     }
 
@@ -54,15 +69,20 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardResponse createCard(Card card) {
-        User user = userService.getUserById(card.getOwner().getId());
+    public CardResponse createCard(CardRequest request) {
+        User user = userService.getUserById(request.getOwner());
+        ProtectedCardNumber protectedNumber = cardNumberProtector.protect(request.getNumber());
 
-        Optional<Card> oCard = repository.findByNumber(card.getNumber());
+        Optional<Card> oCard = repository.findByNumberHash(protectedNumber.hash());
         if (oCard.isPresent()) {
             throw new BadRequestException("Создание карты отклонено");
         }
 
+        Card card = new Card();
         card.setOwner(user);
+        card.setNumberEncrypted(protectedNumber.encrypted());
+        card.setNumberHash(protectedNumber.hash());
+        card.setNumberLast4(protectedNumber.last4());
         card.setStatus(ACTIVE);
         card.setBalance(0L);
 
@@ -121,15 +141,11 @@ public class CardServiceImpl implements CardService {
     private CardResponse mapToResponse(Card card) {
         return new CardResponse(
                 card.getId(),
-                maskCardNumber(card.getNumber()),
+                cardNumberProtector.mask(card.getNumberLast4()),
                 card.getOwner().getId(),
                 card.getValidityPeriod(),
                 card.getStatus(),
                 card.getBalance()
         );
-    }
-
-    private String maskCardNumber(String number) {
-        return "**** **** **** " + number.substring(number.length() - 4);
     }
 }

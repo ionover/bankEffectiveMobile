@@ -8,8 +8,6 @@ import jakarta.validation.Valid;
 import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.CardResponse;
 import org.example.bank2.dto.enums.CardStatus;
-import org.example.bank2.entity.Card;
-import org.example.bank2.entity.User;
 import org.example.bank2.service.CardService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -39,7 +37,7 @@ public class CardController {
     @PreAuthorize(HAS_ANY_AUTHORITY)
     @Operation(summary = "Получить список карт", description = "Возвращает постраничный список карт с фильтрами")
     public ResponseEntity<Page<CardResponse>> getAll(@ParameterObject Pageable pageable,
-                                                     @Parameter(description = "Фильтр по номеру карты",
+                                                     @Parameter(description = "Фильтр по полному номеру карты или последним 4 цифрам",
                                                              example = "1234567890123456")
                                                      @RequestParam(required = false) String number,
                                                      @Parameter(description = "Фильтр по статусу карты",
@@ -66,7 +64,7 @@ public class CardController {
     @PreAuthorize(ADMIN_AUTHORITY)
     @Operation(summary = "Создать карту", description = "Создает банковскую карту для пользователя")
     public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest request) {
-        CardResponse card = cardService.createCard(new Card(request.getNumber(), new User(request.getOwner())));
+        CardResponse card = cardService.createCard(request);
 
         return ResponseEntity.status(CREATED).body(card);
     }

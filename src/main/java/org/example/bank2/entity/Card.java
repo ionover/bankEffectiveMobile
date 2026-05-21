@@ -16,8 +16,14 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String number;
+    @Column(name = "number_encrypted")
+    private String numberEncrypted;
+
+    @Column(name = "number_hash")
+    private String numberHash;
+
+    @Column(name = "number_last4")
+    private String numberLast4;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner", nullable = false)
@@ -48,15 +54,17 @@ public class Card {
     public Card() {
     }
 
-    public Card(String number, User owner) {
-        this.number = number;
+    public Card(User owner) {
         this.owner = owner;
     }
 
-    public Card(Long id, String number, User owner, LocalDateTime validityPeriod, CardStatus status, Long balance,
+    public Card(Long id, String numberEncrypted, String numberHash, String numberLast4, User owner,
+                LocalDateTime validityPeriod, CardStatus status, Long balance,
                 LocalDateTime createdAt, LocalDateTime updatedAt, Long version) {
         this.id = id;
-        this.number = number;
+        this.numberEncrypted = numberEncrypted;
+        this.numberHash = numberHash;
+        this.numberLast4 = numberLast4;
         this.owner = owner;
         this.validityPeriod = validityPeriod;
         this.status = status;
@@ -74,12 +82,28 @@ public class Card {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getNumberEncrypted() {
+        return numberEncrypted;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setNumberEncrypted(String numberEncrypted) {
+        this.numberEncrypted = numberEncrypted;
+    }
+
+    public String getNumberHash() {
+        return numberHash;
+    }
+
+    public void setNumberHash(String numberHash) {
+        this.numberHash = numberHash;
+    }
+
+    public String getNumberLast4() {
+        return numberLast4;
+    }
+
+    public void setNumberLast4(String numberLast4) {
+        this.numberLast4 = numberLast4;
     }
 
     public User getOwner() {
@@ -142,7 +166,7 @@ public class Card {
     public String toString() {
         return "{" +
                 "\"id\":" + (id == null ? "null" : "\"" + id + "\"") + ", " +
-                "\"number\":" + (number == null ? "null" : "\"" + number + "\"") + ", " +
+                "\"number\":" + (numberLast4 == null ? "null" : "\"**** **** **** " + numberLast4 + "\"") + ", " +
                 "\"owner\":" + (owner == null ? "null" : owner) + ", " +
                 "\"validityPeriod\":" + (validityPeriod == null ? "null" : validityPeriod) + ", " +
                 "\"status\":" + (status == null ? "null" : status) + ", " +

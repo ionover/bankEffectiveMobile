@@ -1,6 +1,7 @@
 package org.example.bank2.service;
 
 import org.example.bank2.dto.CardResponse;
+import org.example.bank2.dto.CardRequest;
 import org.example.bank2.dto.enums.CardStatus;
 import org.example.bank2.entity.Card;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,7 @@ public interface CardService {
 
     CardResponse getCardById(Long id);
 
-    CardResponse createCard(Card card);
+    CardResponse createCard(CardRequest request);
 
     void deleteById(Long id);
 
