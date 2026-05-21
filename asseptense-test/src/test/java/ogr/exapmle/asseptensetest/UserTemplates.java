@@ -18,7 +18,7 @@ public class UserTemplates {
     }
 
     public static UserRequest defaultUser() {
-        return new UserRequest(randomAlphanumeric(8),
+        return new UserRequest(uniqueLogin("user"),
                                "12",
                                "Иван",
                                "Иванов",
@@ -29,7 +29,7 @@ public class UserTemplates {
     }
 
     public static UserRequest administrator() {
-        return new UserRequest("admin",
+        return new UserRequest(uniqueLogin("admin"),
                                "12",
                                "Админ",
                                "Администраторов",
@@ -40,7 +40,7 @@ public class UserTemplates {
     }
 
     public static UserRequest notAdmin() {
-        return new UserRequest(randomAlphanumeric(8),
+        return new UserRequest(uniqueLogin("noAdmin"),
                                "12",
                                "Не админ",
                                "Не администраторов",
@@ -51,7 +51,7 @@ public class UserTemplates {
     }
 
     public static UserRequest standardUser() {
-        return new UserRequest("standart@ru",
+        return new UserRequest(uniqueLogin("standard"),
                                "12",
                                "Обычный",
                                "Обычный",
@@ -62,7 +62,7 @@ public class UserTemplates {
     }
 
     public static UserRequest changeCardStatus() {
-        return new UserRequest(randomAlphanumeric(8),
+        return new UserRequest(uniqueLogin("changeCardStatus"),
                                "12",
                                "changeCardStatus",
                                "Менять",
@@ -71,5 +71,8 @@ public class UserTemplates {
                                false
         );
     }
-}
 
+    private static String uniqueLogin(String prefix) {
+        return prefix + "-" + randomAlphanumeric(8);
+    }
+}

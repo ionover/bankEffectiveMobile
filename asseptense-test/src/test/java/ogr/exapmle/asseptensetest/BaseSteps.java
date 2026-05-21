@@ -1,13 +1,17 @@
 package ogr.exapmle.asseptensetest;
 
 import com.google.gson.Gson;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
+import org.example.bank2.dto.UserRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,11 +22,26 @@ public class BaseSteps {
     public static final String BASE_URL = "http://localhost:8084";
     public static String TOKEN;
     public static Long userId;
+    public static String userLogin;
+    public static String userPassword;
     public static Long cardId;
     public static List<Long> createdCards = new ArrayList<>();
+    public static Map<String, UserRequest> usersByTemplate = new HashMap<>();
 
     public static Response response;
     public static Gson gson = new Gson();
+
+    @Before
+    public void resetScenarioState() {
+        TOKEN = "";
+        userId = null;
+        userLogin = null;
+        userPassword = null;
+        cardId = null;
+        createdCards.clear();
+        usersByTemplate.clear();
+        response = null;
+    }
 
     @Then("сервер отвечает статусом {int}")
     public void checkStatus(int status) {

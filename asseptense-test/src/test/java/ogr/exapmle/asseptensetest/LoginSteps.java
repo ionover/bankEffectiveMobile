@@ -6,6 +6,7 @@ import org.example.bank2.dto.LoginDto;
 
 import static io.restassured.RestAssured.given;
 import static ogr.exapmle.asseptensetest.BaseSteps.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class LoginSteps {
 
@@ -14,11 +15,20 @@ public class LoginSteps {
     public void doLogin(String username, String password) {
         LoginDto login = new LoginDto(username, password);
 
+        TOKEN = "";
         login(login);
 
         if (response.statusCode() == 200) {
             TOKEN = response.body().asString();
         }
+    }
+
+    @Given("последний созданный пользователь авторизован")
+    public void doLoginAsLastCreatedUser() {
+        assertNotNull(userLogin, "Нет последнего созданного пользователя для авторизации");
+        assertNotNull(userPassword, "Нет пароля последнего созданного пользователя для авторизации");
+
+        doLogin(userLogin, userPassword);
     }
 
     private static void login(LoginDto login) {
