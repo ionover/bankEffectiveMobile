@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.example.bank2.dto.AmountResponse;
 import org.example.bank2.dto.TransferMoneyRequest;
 import org.example.bank2.dto.TransferMoneyResponse;
@@ -41,7 +42,9 @@ public class OperationController {
 
     @PostMapping("/transferMoney")
     @Operation(summary = "Перевести деньги", description = "Переводит деньги с одной карты на другую")
-    public ResponseEntity<TransferMoneyResponse> transferMoney(@RequestBody TransferMoneyRequest transferMoneyRequest) {
+    public ResponseEntity<TransferMoneyResponse> transferMoney(
+            @RequestBody @Valid TransferMoneyRequest transferMoneyRequest) {
+
         if (transferMoneyRequest.getMoney() <= 0) {
             throw new BadRequestException("Сумма перевода должна быть больше нуля!!!");
         }
