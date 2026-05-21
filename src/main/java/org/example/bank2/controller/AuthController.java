@@ -36,8 +36,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Получить JWT токен",
-               description = "Проверяет логин и пароль пользователя и возвращает JWT токен",
-               security = {})
+               description = "Проверяет логин и пароль пользователя и возвращает JWT токен")
     public ResponseEntity<String> getToken(@RequestBody @Valid LoginDto loginDto) {
         try {
             authenticationManager.authenticate(

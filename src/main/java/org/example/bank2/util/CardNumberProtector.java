@@ -59,31 +59,6 @@ public class CardNumberProtector {
         return new CardNumberFilter(hash(normalizedNumber), null);
     }
 
-    public String restore(String encryptedNumber) {
-        if (encryptedNumber == null || encryptedNumber.isBlank()) {
-            throw new BadRequestException("Зашифрованный номер карты не задан");
-        }
-
-        try {
-            byte[] encryptedPayload = Base64.getDecoder().decode(encryptedNumber);
-            if (encryptedPayload.length <= GCM_IV_LENGTH_BYTES) {
-                throw new BadRequestException("Номер карты не удалось расшифровать");
-            }
-            ByteBuffer buffer = ByteBuffer.wrap(encryptedPayload);
-            byte[] iv = new byte[GCM_IV_LENGTH_BYTES];
-            buffer.get(iv);
-            byte[] cipherText = new byte[buffer.remaining()];
-            buffer.get(cipherText);
-
-            Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
-            cipher.init(Cipher.DECRYPT_MODE, encryptionKey, new GCMParameterSpec(GCM_TAG_LENGTH_BITS, iv));
-
-            return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
-        } catch (IllegalArgumentException | GeneralSecurityException e) {
-            throw new BadRequestException("Номер карты не удалось расшифровать");
-        }
-    }
-
     public String mask(String last4) {
         if (last4 == null || !last4.matches("\\d{4}")) {
             throw new BadRequestException("Некорректные последние четыре цифры номера карты");
@@ -151,7 +126,7 @@ public class CardNumberProtector {
     private String toHex(byte[] bytes) {
         char[] hexDigits = "0123456789abcdef".toCharArray();
         StringBuilder hex = new StringBuilder(bytes.length * 2);
-        for (byte currentByte : bytes) {
+        for (byte currentByte: bytes) {
             hex.append(hexDigits[(currentByte >> 4) & 0x0f]);
             hex.append(hexDigits[currentByte & 0x0f]);
         }
@@ -166,8 +141,10 @@ public class CardNumberProtector {
     }
 
     public record ProtectedCardNumber(String encrypted, String hash, String last4) {
+
     }
 
     public record CardNumberFilter(String hash, String last4) {
+
     }
 }
