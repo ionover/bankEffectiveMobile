@@ -2,6 +2,8 @@ package ogr.exapmle.asseptensetest;
 
 import org.example.bank2.dto.UserRequest;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+
 public class UserTemplates {
 
     public static UserRequest getUserTemplate(String template) {
@@ -16,7 +18,7 @@ public class UserTemplates {
     }
 
     public static UserRequest defaultUser() {
-        return new UserRequest("user_default",
+        return new UserRequest(randomAlphanumeric(8),
                                "12",
                                "Иван",
                                "Иванов",
@@ -38,7 +40,7 @@ public class UserTemplates {
     }
 
     public static UserRequest notAdmin() {
-        return new UserRequest("noAdmin@ru",
+        return new UserRequest(randomAlphanumeric(8),
                                "12",
                                "Не админ",
                                "Не администраторов",
@@ -60,7 +62,7 @@ public class UserTemplates {
     }
 
     public static UserRequest changeCardStatus() {
-        return new UserRequest("changeCardStatus@ru",
+        return new UserRequest(randomAlphanumeric(8),
                                "12",
                                "changeCardStatus",
                                "Менять",

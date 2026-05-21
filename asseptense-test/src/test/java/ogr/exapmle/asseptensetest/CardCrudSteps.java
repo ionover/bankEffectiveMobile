@@ -21,7 +21,7 @@ public class CardCrudSteps {
     @Given("для последнего пользователя существует карта")
     @When("я создаю карту для последнего пользователя")
     public void createCard() {
-        CardRequest cardRequest = new CardRequest(RandomStringUtils.randomAlphabetic(10), userId);
+        CardRequest cardRequest = new CardRequest(RandomStringUtils.randomNumeric(16), userId);
 
         response = given()
                 .header("Authorization", "Bearer " + TOKEN)
@@ -30,6 +30,7 @@ public class CardCrudSteps {
                 .when()
                 .post(BASE_URL + "/cards");
 
+        assertEquals(201, response.statusCode(), "Карта не создана: " + response.asString());
         if (response.statusCode() == 201) {
             cardId = response.jsonPath().getLong("id");
             createdCards.add(cardId);

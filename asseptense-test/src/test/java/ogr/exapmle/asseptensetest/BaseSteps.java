@@ -1,7 +1,6 @@
 package ogr.exapmle.asseptensetest;
 
 import com.google.gson.Gson;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,7 +8,6 @@ import io.restassured.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,8 +23,6 @@ public class BaseSteps {
 
     public static Response response;
     public static Gson gson = new Gson();
-
-
 
     @Then("сервер отвечает статусом {int}")
     public void checkStatus(int status) {
@@ -51,7 +47,7 @@ public class BaseSteps {
             return;
         }
 
-        for (Long id : userIds) {
+        for (Long id: userIds) {
             if (id == null || id == 1L) {
                 continue;
             }
@@ -67,6 +63,7 @@ public class BaseSteps {
     @Given("очищен пул созданных ранее карт")
     public void clearCreatedCards() {
         createdCards.clear();
+        cardId = null;
     }
 
     @Given("токен забыт")

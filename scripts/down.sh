@@ -8,4 +8,6 @@ COMPOSE_FILE="${PROJECT_ROOT}/docker-compose.yml"
 ENV_FILE="${1:-${PROJECT_ROOT}/.env}"
 
 docker compose --env-file "${ENV_FILE}" -f "${COMPOSE_FILE}" down
-docker rmi -f bank2-backend:latest || true
+if docker image inspect bank2-backend:latest >/dev/null 2>&1; then
+  docker rmi -f bank2-backend:latest
+fi
